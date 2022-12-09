@@ -1,0 +1,28 @@
+version: '2.1'
+
+services:
+  tsdb:
+    image: jsvisa/ethereum-tsdb:v14
+    container_name: tsdb
+    deploy:
+      resources:
+        limits:
+          memory: 40G
+        reservations:
+          memory: 2G
+    command:
+      - 'postgres'
+      - '-cshared_preload_libraries=pg_stat_statements'
+      - '-cshared_preload_libraries=timescaledb'
+      - '-cmax_connections=1000'
+      - '-cmax_wal_size=8GB'
+      - '-cshared_buffers=30GB'
+    volumes:
+      - /md0/tsdb/pgdata:/home/postgres/pgdata
+      - /md0/tsdb/pg_log:/home/postgres/pg_log
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=tsdb
+    restart: unless-stopped
+    ports:
+      - '7432:5432'
