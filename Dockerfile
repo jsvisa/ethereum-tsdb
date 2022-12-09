@@ -1,5 +1,6 @@
 FROM timescale/timescaledb-ha:pg14-latest
 
+USER root
 # python packages
 RUN apt-get update \
     && apt-get install -y python3-pip \
