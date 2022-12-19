@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  dtl:
+    image: ethereumoptimism/data-transport-layer:0.5.39
+    container_name: dtl
+    env_file:
+      - mainnet.env
+    ports:
+      - 7878:7878
+    volumes:
+      - ./data/dtl:/db
+
+  replica:
+    image: ethereumoptimism/l2geth:0.5.23
+    # image: jsvisa/optimism-l2geth:v0.2
+    container_name: replica
+    entrypoint:
+      - /scripts/start-l2geth.sh
+    env_file:
+      - mainnet.env
+      - l2geth-mainnet.env
+    environment:
+      ROLLUP_BACKEND: l2
+      ROLLUP_VERIFIER_ENABLE: 'true'
+    ports:
+      - 9991:8545
+      - 9992:8546
+    volumes:
+      - ./data/replica:/geth
+      - ./scripts/:/scripts/
+
+  l2geth:
+    image: ethereumoptimism/l2geth:0.5.23
+    # image: jsvisa/optimism-l2geth:v0.2
+    container_name: l2geth
+    entrypoint:
+      - /scripts/start-l2geth.sh
+    env_file:
+      - mainnet.env
+      - l2geth-mainnet.env
+    environment:
+      ROLLUP_ENFORCE_FEES: ${ROLLUP_ENFORCE_FEES:-true}
+      ROLLUP_FEE_THRESHOLD_DOWN: 0.9
+      ROLLUP_FEE_THRESHOLD_UP: 1.1
+    ports:
+      - 9993:8545
+      - 9994:8546
+    volumes:
+      - ./data/l2geth:/geth
+      - ./scripts/:/scripts/
