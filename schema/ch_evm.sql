@@ -147,7 +147,7 @@ CREATE TABLE IF NOT EXISTS {{ chain }}.token_xfers (
     token_address       TEXT,       -- ERC20 token address
     name                TEXT,       -- Token name
     symbol              TEXT,       -- Token symol
-    decimals            BIGINT,     -- Token decimals
+    decimals            BIGINT DEFAULT -1,     -- Token decimals, -1 stands for null in PostgreSQL
     from_address        TEXT,       -- Address of the sender
     to_address          TEXT,       -- Address of the receiver
     value               UInt256     -- Amount of tokens transferred (ERC20) / id of the token transferred (ERC721)
