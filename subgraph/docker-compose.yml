@@ -1,0 +1,122 @@
+version: '3'
+services:
+  eth-graph:
+    image: graphprotocol/graph-node:v0.29.0
+    container_name: eth-graph
+    ports:
+      - '8010:8000'
+      - '8011:8001'
+      - '8020:8020'
+      - '8030:8030'
+      - '8040:8040'
+    depends_on:
+      - ipfs
+      - postgres
+    restart: unless-stopped
+    environment:
+      postgres_host: postgres
+      postgres_user: graph-node
+      postgres_pass: ${POSTGRES_PASSWORD}
+      postgres_db: ethereum
+      ipfs: 'ipfs:5001'
+      ethereum: 'mainnet:${ETHEREUM_JSONRPC}'
+      GRAPH_ETHEREUM_TARGET_TRIGGERS_PER_BLOCK_RANGE: 800
+      ETHEREUM_BLOCK_BATCH_SIZE: 100
+      GRAPH_ETHEREUM_MAX_BLOCK_RANGE_SIZE: 2048
+      GRAPH_MAX_IPFS_CACHE_SIZE: 256
+      GRAPH_ENTITY_CACHE_SIZE: 40000
+      STORE_CONNECTION_POOL_SIZE: 128
+      ETHEREUM_POLLING_INTERVAL: 125
+      GRAPH_GRAPHQL_MAX_FIRST: 20000
+      GRAPH_LOG: debug
+
+  ftm-graph:
+    image: graphprotocol/graph-node:v0.29.0
+    container_name: ftm-graph
+    ports:
+      - '8110:8000'
+      - '8111:8001'
+      - '8120:8020'
+      - '8130:8030'
+      - '8140:8040'
+    depends_on:
+      - ipfs
+      - postgres
+    restart: unless-stopped
+    environment:
+      postgres_host: postgres
+      postgres_user: graph-node
+      postgres_pass: ${POSTGRES_PASSWORD}
+      postgres_db: fantom
+      ipfs: 'ipfs:5001'
+      ethereum: 'fantom:${FANTOM_JSONRPC}'
+      GRAPH_ETHEREUM_TARGET_TRIGGERS_PER_BLOCK_RANGE: 800
+      ETHEREUM_BLOCK_BATCH_SIZE: 100
+      GRAPH_ETHEREUM_MAX_BLOCK_RANGE_SIZE: 2048
+      GRAPH_MAX_IPFS_CACHE_SIZE: 256
+      GRAPH_ENTITY_CACHE_SIZE: 40000
+      STORE_CONNECTION_POOL_SIZE: 128
+      ETHEREUM_POLLING_INTERVAL: 125
+      GRAPH_GRAPHQL_MAX_FIRST: 20000
+      GRAPH_LOG: debug
+
+  bsc-graph:
+    image: graphprotocol/graph-node:v0.29.0
+    container_name: bsc-graph
+    ports:
+      - '8210:8000'
+      - '8211:8001'
+      - '8220:8020'
+      - '8230:8030'
+      - '8240:8040'
+    depends_on:
+      - ipfs
+      - postgres
+    restart: unless-stopped
+    environment:
+      postgres_host: postgres
+      postgres_user: graph-node
+      postgres_pass: ${POSTGRES_PASSWORD}
+      postgres_db: bsc
+      ipfs: 'ipfs:5001'
+      ethereum: 'bsc:${BSC_JSONRPC}'
+      GRAPH_ETHEREUM_TARGET_TRIGGERS_PER_BLOCK_RANGE: 800
+      ETHEREUM_BLOCK_BATCH_SIZE: 100
+      GRAPH_ETHEREUM_MAX_BLOCK_RANGE_SIZE: 2048
+      GRAPH_MAX_IPFS_CACHE_SIZE: 256
+      GRAPH_ENTITY_CACHE_SIZE: 40000
+      STORE_CONNECTION_POOL_SIZE: 128
+      ETHEREUM_POLLING_INTERVAL: 125
+      GRAPH_GRAPHQL_MAX_FIRST: 20000
+      GRAPH_LOG: debug
+
+  ipfs:
+    image: ipfs/go-ipfs:v0.10.0
+    container_name: graph-ipfs
+    ports:
+      - '8501:5001'
+    volumes:
+      - ./data/ipfs:/data/ipfs
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15.1-alpine
+    container_name: graph-psql
+    ports:
+      - '15432:5432'
+    command:
+      [
+        'postgres',
+        '-cshared_preload_libraries=pg_stat_statements',
+        '-cmax_connections=1000',
+      ]
+    environment:
+      POSTGRES_USER: graph-node
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: graph-node
+      POSTGRES_MULTIPLE_DATABASES: ethereum,fantom,bsc
+      PGDATA: '/var/lib/postgresql/data'
+      POSTGRES_INITDB_ARGS: '-E UTF8 --locale=C'
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+      - ./pg-init-scripts:/docker-entrypoint-initdb.d
