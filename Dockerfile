@@ -1,4 +1,4 @@
-FROM timescale/timescaledb-ha:pg14-latest
+FROM timescale/timescaledb-ha:pg14-ts2.9-latest
 
 USER root
 # python packages
