@@ -145,12 +145,12 @@ CREATE TABLE IF NOT EXISTS {{ chain }}.token_xfers (
     txpos               BIGINT,     -- Integer of the transactions index position in the block
     logpos              BIGINT,     -- Log index in the transaction receipt
     token_address       TEXT,       -- ERC20 token address
-    name                TEXT,       -- Token name
-    symbol              TEXT,       -- Token symol
-    decimals            BIGINT DEFAULT -1,     -- Token decimals, -1 stands for null in PostgreSQL
     from_address        TEXT,       -- Address of the sender
     to_address          TEXT,       -- Address of the receiver
-    value               UInt256     -- Amount of tokens transferred (ERC20) / id of the token transferred (ERC721)
+    value               UInt256,    -- Amount of tokens transferred (ERC20) / id of the token transferred (ERC721)
+    name                TEXT,       -- Token name
+    symbol              TEXT,       -- Token symol
+    decimals            BIGINT DEFAULT -1     -- Token decimals, -1 stands for null in PostgreSQL
 )
 ENGINE = ReplacingMergeTree
 PARTITION BY toYYYYMM(block_timestamp)
