@@ -17,9 +17,12 @@ services:
       - '-cmax_connections=1000'
       - '-cmax_wal_size=8GB'
       - '-cshared_buffers=30GB'
+      - '-cmax_wal_senders=20'
+      - '-cwal_level=replica'
     volumes:
-      - pgdata:/home/postgres/pgdata
-      - pg_log:/home/postgres/pg_log
+      - ./pgdata:/home/postgres/pgdata
+      - ./pg_log:/home/postgres/pg_log
+      - ./etc/pgbackrest.conf:/home/postgres/pgdata/backup/pgbackrest.conf
     environment:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=tsdb
