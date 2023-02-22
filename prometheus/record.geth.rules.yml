@@ -1,0 +1,12 @@
+groups:
+  - name: geth_rpc_requests_rules
+    rules:
+      - expr: label_replace({__name__=~"rpc_duration_.*_success"}, "method", "$1", "__name__", "rpc_duration_(.+)_success")
+        record: geth_rpc_requests_success
+      - expr: label_replace({__name__=~"rpc_duration_.*_failure"}, "method", "$1", "__name__", "rpc_duration_(.+)_failure")
+        record: geth_rpc_requests_failure
+
+      - expr: label_replace({__name__=~"rpc_duration_.*_success_count"}, "method", "$1", "__name__", "rpc_duration_(.+)_success_count")
+        record: geth_rpc_requests_success_count
+      - expr: label_replace({__name__=~"rpc_duration_.*_failure_count"}, "method", "$1", "__name__", "rpc_duration_(.+)_failure_count")
+        record: geth_rpc_requests_failure_count
