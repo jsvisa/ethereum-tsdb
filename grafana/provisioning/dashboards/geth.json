@@ -5492,9 +5492,9 @@
       },
       {
         "current": {
-          "selected": true,
-          "text": "10.132.83.92:2033",
-          "value": "10.132.83.92:2033"
+          "selected": false,
+          "text": "127.0.0.1:6800",
+          "value": "127.0.0.1:6800"
         },
         "datasource": {
           "type": "prometheus",
