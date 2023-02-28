@@ -4,8 +4,11 @@ Ethereum ETL Schema based on TimescaleDB
 
 > build
 
+find a valid timescaledb image from https://hub.docker.com/r/timescale/timescaledb-ha
+
 ```bash
-make VERSION=pg14-ts2.9-v0.1 build-image
+TS_VERSION=pg15-ts2.9-latest VERSION=pg15-ts2.9-v0.3 make build-image
+TS_VERSION=pg14-ts2.9-latest VERSION=pg14-ts2.9-v0.2 make build-image
 ```
 
 ## upgrade tsdb

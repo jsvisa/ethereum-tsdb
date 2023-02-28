@@ -1,4 +1,5 @@
-FROM timescale/timescaledb-ha:pg14-ts2.9-latest
+ARG TS_VERSION
+FROM timescale/timescaledb-ha:${TS_VERSION}
 
 USER root
 # python packages
