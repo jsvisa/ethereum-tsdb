@@ -1,0 +1,80 @@
+version: '3'
+
+services:
+  geth:
+    image: ethereum/client-go:v1.11.4
+    container_name: geth
+    command:
+      - '--db.engine=pebble'
+      - '--syncmode=full'
+      - '--gcmode=archive'
+      - '--datadir=/data'
+      - '--cache.preimages'
+      - '--cache=4120'
+      - '--cache.database=60'
+      - '--cache.trie=30'
+      - '--cache.gc=5'
+      - '--cache.snapshot=5'
+      - '--cache.trie.rejournal=48h'
+      - '--maxpeers=100'
+      - '--snapshot=false'
+      - '--port=40303'
+      - '--http'
+      - '--http.addr=0.0.0.0'
+      - '--http.port=4545'
+      - '--http.api=engine,web3,eth,net,personal,miner,txpool,debug,admin'
+      - '--ws'
+      - '--ws.addr=0.0.0.0'
+      - '--ws.port=4546'
+      - '--ws.origins=*'
+      - '--ws.api=engine,web3,eth,net,personal,miner,txpool,debug,admin'
+      - '--authrpc.addr=0.0.0.0'
+      - '--authrpc.port=8552'
+      - '--authrpc.vhosts=*'
+      - '--authrpc.jwtsecret=/jwt/jwt.hex'
+      - '--http.vhosts=*'
+      - '--http.corsdomain=*'
+      - '--metrics'
+      - '--metrics.addr=0.0.0.0'
+      - '--metrics.port=6040'
+      - '--pprof'
+      - '--pprof.addr=0.0.0.0'
+      - '--pprof.port=6041'
+      - '--txlookuplimit=0'
+      - '--txpool.accountslots=32'
+      - '--txpool.globalslots=1024'
+      - '--txpool.accountqueue=256'
+      - '--txpool.globalqueue=2048'
+    volumes:
+      - ./data:/data
+      - ./jwt:/jwt
+    restart: unless-stopped
+    ports:
+      - '4545:4545'
+      - '6040:6040'
+      - '6041:6041'
+
+  prysm:
+    image: prysmaticlabs/prysm-beacon-chain:v3.2.1
+    container_name: prysm
+    command:
+      - '--mainnet'
+      - '--datadir=/data'
+      - '--http-web3provider=http://geth:4545'
+      - '--rpc-host=0.0.0.0'
+      - '--rpc-port=9548'
+      - '--p2p-tcp-port=13005'
+      - '--p2p-udp-port=12005'
+      - '--monitoring-host=0.0.0.0'
+      - '--execution-endpoint=http://geth:8552'
+      - '--jwt-secret=/jwt/jwt.hex'
+      - '--accept-terms-of-use'
+      - '--grpc-gateway-host=0.0.0.0'
+      - '--grpc-gateway-port=3505'
+      - '--grpc-gateway-corsdomain=*'
+      - '--checkpoint-sync-url=https://beaconstate.info/'
+      - '--genesis-beacon-api-url=https://beaconstate.info/'
+    volumes:
+      - ./prysm:/data
+      - ./jwt:/jwt
+    restart: unless-stopped
