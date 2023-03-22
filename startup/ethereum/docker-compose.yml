@@ -2,12 +2,20 @@ version: '3'
 
 services:
   geth:
-    image: ethereum/client-go:v1.11.4
+    image: ethereum/client-go:v1.11.5
     container_name: geth
+    stop_signal: SIGINT
+    stop_grace_period: 2m
+    healthcheck:
+      test: ['CMD-SHELL', 'geth attach --exec eth.blockNumber']
+      interval: 10s
+      timeout: 5s
+      retries: 5
     command:
       - '--db.engine=pebble'
-      - '--syncmode=full'
-      - '--gcmode=archive'
+      - '--syncmode=snap'
+      # - '--syncmode=full'
+      # - '--gcmode=archive'
       - '--datadir=/data'
       - '--cache.preimages'
       - '--cache=4120'
@@ -18,7 +26,7 @@ services:
       - '--cache.trie.rejournal=48h'
       - '--maxpeers=100'
       - '--snapshot=false'
-      - '--port=40303'
+      - '--port=30303'
       - '--http'
       - '--http.addr=0.0.0.0'
       - '--http.port=4545'
@@ -29,48 +37,52 @@ services:
       - '--ws.origins=*'
       - '--ws.api=engine,web3,eth,net,personal,miner,txpool,debug,admin'
       - '--authrpc.addr=0.0.0.0'
-      - '--authrpc.port=8552'
+      - '--authrpc.port=8551'
       - '--authrpc.vhosts=*'
       - '--authrpc.jwtsecret=/jwt/jwt.hex'
       - '--http.vhosts=*'
       - '--http.corsdomain=*'
       - '--metrics'
+      - '--metrics.expensive'
       - '--metrics.addr=0.0.0.0'
       - '--metrics.port=6040'
       - '--pprof'
       - '--pprof.addr=0.0.0.0'
       - '--pprof.port=6041'
-      - '--txlookuplimit=0'
-      - '--txpool.accountslots=32'
-      - '--txpool.globalslots=1024'
-      - '--txpool.accountqueue=256'
-      - '--txpool.globalqueue=2048'
+      # - '--txlookuplimit=0'
     volumes:
       - ./data:/data
       - ./jwt:/jwt
     restart: unless-stopped
     ports:
-      - '4545:4545'
-      - '6040:6040'
-      - '6041:6041'
+      - 30303:30303
+      - 30303:30303/udp
+      - 4545:4545 # jsonrpc
+      - 4546:4546 # websocket
+      - 6040:6040 # /debug/metrics
+      - 6041:6041 # /debug/pprof
 
   prysm:
-    image: prysmaticlabs/prysm-beacon-chain:v3.2.1
+    image: prysmaticlabs/prysm-beacon-chain:v3.2.2
     container_name: prysm
+    stop_grace_period: 2m
+    depends_on:
+      geth:
+        condition: service_healthy
     command:
       - '--mainnet'
       - '--datadir=/data'
       - '--http-web3provider=http://geth:4545'
       - '--rpc-host=0.0.0.0'
-      - '--rpc-port=9548'
+      - '--rpc-port=4000'
       - '--p2p-tcp-port=13005'
       - '--p2p-udp-port=12005'
       - '--monitoring-host=0.0.0.0'
-      - '--execution-endpoint=http://geth:8552'
+      - '--execution-endpoint=http://geth:8551'
       - '--jwt-secret=/jwt/jwt.hex'
       - '--accept-terms-of-use'
       - '--grpc-gateway-host=0.0.0.0'
-      - '--grpc-gateway-port=3505'
+      - '--grpc-gateway-port=3500'
       - '--grpc-gateway-corsdomain=*'
       - '--checkpoint-sync-url=https://beaconstate.info/'
       - '--genesis-beacon-api-url=https://beaconstate.info/'
@@ -78,3 +90,6 @@ services:
       - ./prysm:/data
       - ./jwt:/jwt
     restart: unless-stopped
+    ports:
+      - 4000:4000
+      - 3500:3500
