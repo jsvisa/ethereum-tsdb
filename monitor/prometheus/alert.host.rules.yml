@@ -1,0 +1,250 @@
+groups:
+  - name: Host resource monitoring
+    rules:
+      - alert: HostHighCpuLoad
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[2m])) * 100) > 90
+        for: 0m
+        labels:
+          severity: warning
+          expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[2m])) * 100) > 90
+        annotations:
+          value: '{{ $value }}'
+          summary: Host high CPU load (instance {{ $labels.instance }})
+          description: "CPU load is > 90%\n  VALUE = {{ $value }}"
+
+      - alert: HostHighLoad5m
+        expr: node_load5 / count by (instance, job) (node_cpu_seconds_total{mode="idle"}) >= 1.6
+        for: 2m
+        labels:
+          severity: warning
+          expr: node_load5 / count by (instance, job) (node_cpu_seconds_total{mode="idle"}) >= 1.6
+        annotations:
+          value: '{{ $value }}'
+          summary: Host high load5m (instance {{ $labels.instance }})
+          description: "Host load5m is > 110%\n  VALUE = {{ $value }}"
+
+      - alert: HostOutOfMemory
+        expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 10 and node_memory_MemAvailable_bytes < 10*1024*1024*1024
+        for: 2m
+        labels:
+          severity: critical
+          expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 10 and node_memory_MemAvailable_bytes < 10*1024*1024*1024
+        annotations:
+          value: '{{ $value }}'
+          summary: Host out of memory (instance {{ $labels.instance }})
+          description: "Node memory is filling up (< 10% left && < 10GB)\n  VALUE = {{ $value }}"
+
+      # Please add ignored mountpoints in node_exporter parameters like
+      # "--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|run)($|/)".
+      # Same rule using "node_filesystem_free_bytes" will fire when disk fills for non-root users.
+      - alert: HostOutOfDiskSpace
+        expr: (node_filesystem_avail_bytes * 100) / node_filesystem_size_bytes < 10 and node_filesystem_avail_bytes < 50*1024*1024*1024 and ON (instance, device, mountpoint) node_filesystem_readonly == 0
+        for: 2m
+        labels:
+          severity: critical
+          expr: (node_filesystem_avail_bytes * 100) / node_filesystem_size_bytes < 10 and node_filesystem_avail_bytes < 50*1024*1024*1024 and ON (instance, device, mountpoint) node_filesystem_readonly == 0
+        annotations:
+          value: '{{ $value }}'
+          summary: Host out of disk space (instance {{ $labels.instance }})
+          description: "Disk is almost full (< 10% left && < 50GB)\n  VALUE = {{ $value }}"
+
+      # Please add ignored mountpoints in node_exporter parameters like
+      # "--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|run)($|/)".
+      # Same rule using "node_filesystem_free_bytes" will fire when disk fills for non-root users.
+      - alert: HostDiskWillFillIn24Hours
+        expr: (node_filesystem_avail_bytes * 100) / node_filesystem_size_bytes < 10 and ON (instance, device, mountpoint) predict_linear(node_filesystem_avail_bytes{fstype!~"tmpfs|fuse.juicefs"}[1h], 24 * 3600) < 0 and ON (instance, device, mountpoint) node_filesystem_readonly == 0
+        for: 2m
+        labels:
+          severity: warning
+          expr: (node_filesystem_avail_bytes * 100) / node_filesystem_size_bytes < 10 and ON (instance, device, mountpoint) predict_linear(node_filesystem_avail_bytes{fstype!~"tmpfs|fuse.juicefs"}[1h], 24 * 3600) < 0 and ON (instance, device, mountpoint) node_filesystem_readonly == 0
+        annotations:
+          value: '{{ $value }}'
+          summary: Host disk will fill in 24 hours (instance {{ $labels.instance }})
+          description: "Filesystem is predicted to run out of space within the next 24 hours at current write rate\n  VALUE = {{ $value }}"
+
+      - alert: HostOutOfInodes
+        expr: node_filesystem_files_free{mountpoint="/rootfs"} / node_filesystem_files{mountpoint="/rootfs"} * 100 < 10 and ON (instance, device, mountpoint) node_filesystem_readonly{mountpoint="/rootfs"} == 0
+        for: 2m
+        labels:
+          severity: warning
+          expr: node_filesystem_files_free{mountpoint="/rootfs"} / node_filesystem_files{mountpoint="/rootfs"} * 100 < 10 and ON (instance, device, mountpoint) node_filesystem_readonly{mountpoint="/rootfs"} == 0
+        annotations:
+          value: '{{ $value }}'
+          summary: Host out of inodes (instance {{ $labels.instance }})
+          description: "Disk is almost running out of available inodes (< 10% left)\n  VALUE = {{ $value }}"
+
+      - alert: HostInodesWillFillIn24Hours
+        expr: node_filesystem_files_free{mountpoint="/rootfs"} / node_filesystem_files{mountpoint="/rootfs"} * 100 < 10 and predict_linear(node_filesystem_files_free{mountpoint="/rootfs"}[1h], 24 * 3600) < 0 and ON (instance, device, mountpoint) node_filesystem_readonly{mountpoint="/rootfs"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          expr: node_filesystem_files_free{mountpoint="/rootfs"} / node_filesystem_files{mountpoint="/rootfs"} * 100 < 10 and predict_linear(node_filesystem_files_free{mountpoint="/rootfs"}[1h], 24 * 3600) < 0 and ON (instance, device, mountpoint) node_filesystem_readonly{mountpoint="/rootfs"} == 0
+        annotations:
+          value: '{{ $value }}'
+          summary: Host inodes will fill in 24 hours (instance {{ $labels.instance }})
+          description: "Filesystem is predicted to run out of inodes within the next 24 hours at current write rate\n  VALUE = {{ $value }}"
+
+      - alert: HostUnusualDiskReadLatency
+        expr: rate(node_disk_read_time_seconds_total[1m]) / rate(node_disk_reads_completed_total[1m]) > 0.1 and rate(node_disk_reads_completed_total[1m]) > 0
+        for: 2m
+        labels:
+          severity: warning
+          expr: rate(node_disk_read_time_seconds_total[1m]) / rate(node_disk_reads_completed_total[1m]) > 0.1 and rate(node_disk_reads_completed_total[1m]) > 0
+        annotations:
+          value: '{{ $value }}'
+          summary: Host unusual disk read latency (instance {{ $labels.instance }})
+          description: "Disk latency is growing (read operations > 100ms)\n  VALUE = {{ $value }}"
+
+      - alert: HostUnusualDiskWriteLatency
+        expr: rate(node_disk_write_time_seconds_total[1m]) / rate(node_disk_writes_completed_total[1m]) > 0.1 and rate(node_disk_writes_completed_total[1m]) > 0
+        for: 2m
+        labels:
+          severity: warning
+          expr: rate(node_disk_write_time_seconds_total[1m]) / rate(node_disk_writes_completed_total[1m]) > 0.1 and rate(node_disk_writes_completed_total[1m]) > 0
+        annotations:
+          value: '{{ $value }}'
+          summary: Host unusual disk write latency (instance {{ $labels.instance }})
+          description: "Disk latency is growing (write operations > 100ms)\n  VALUE = {{ $value }}"
+
+      - alert: HostRaidArrayGotInactive
+        expr: node_md_state{state="inactive"} > 0
+        for: 0m
+        labels:
+          severity: critical
+          expr: node_md_state{state="inactive"} > 0
+        annotations:
+          summary: Host RAID array got inactive (instance {{ $labels.instance }})
+          description: "RAID array {{ $labels.device }} is in degraded state due to one or more disks failures. Number of spare drives is insufficient to fix issue automatically.\n  VALUE = {{ $value }}"
+
+      - alert: HostRaidDiskFailure
+        expr: node_md_disks{state="failed"} > 0
+        for: 2m
+        labels:
+          severity: critical
+          expr: node_md_disks{state="failed"} > 0
+        annotations:
+          value: '{{ $value }}'
+          summary: Host RAID disk failure (instance {{ $labels.instance }})
+          description: "At least one device in RAID array on {{ $labels.instance }} failed. Array {{ $labels.md_device }} needs attention and possibly a disk swap\n  VALUE = {{ $value }}"
+
+      - alert: HostOomKillDetected
+        expr: increase(node_vmstat_oom_kill[1m]) > 0
+        for: 0m
+        labels:
+          severity: warning
+          expr: increase(node_vmstat_oom_kill[1m]) > 0
+        annotations:
+          value: '{{ $value }}'
+          summary: Host OOM kill detected (instance {{ $labels.instance }})
+          description: "OOM kill detected\n  VALUE = {{ $value }}"
+
+      - alert: HostNetworkReceiveErrors
+        expr: rate(node_network_receive_errs_total[2m]) / rate(node_network_receive_packets_total[2m]) > 0.01
+        for: 2m
+        labels:
+          severity: warning
+          expr: rate(node_network_receive_errs_total[2m]) / rate(node_network_receive_packets_total[2m]) > 0.01
+        annotations:
+          value: '{{ $value }}'
+          summary: Host Network Receive Errors (instance {{ $labels.instance }})
+          description: "Host {{ $labels.instance }} interface {{ $labels.device }} has encountered {{ printf \"%.0f\" $value }} receive errors in the last two minutes.\n  VALUE = {{ $value }}"
+
+      - alert: HostNetworkTransmitErrors
+        expr: rate(node_network_transmit_errs_total[2m]) / rate(node_network_transmit_packets_total[2m]) > 0.01
+        for: 2m
+        labels:
+          severity: warning
+          expr: rate(node_network_transmit_errs_total[2m]) / rate(node_network_transmit_packets_total[2m]) > 0.01
+        annotations:
+          value: '{{ $value }}'
+          summary: Host Network Transmit Errors (instance {{ $labels.instance }})
+          description: "Host {{ $labels.instance }} interface {{ $labels.device }} has encountered {{ printf \"%.0f\" $value }} transmit errors in the last two minutes.\n  VALUE = {{ $value }}"
+
+      - alert: HostNetworkInterfaceSaturated
+        expr: (rate(node_network_receive_bytes_total{device!~"^tap.*"}[1m]) + rate(node_network_transmit_bytes_total{device!~"^tap.*"}[1m])) / node_network_speed_bytes{device!~"^tap.*"} > 0.8 < 10000
+        for: 1m
+        labels:
+          severity: warning
+          expr: (rate(node_network_receive_bytes_total{device!~"^tap.*"}[1m]) + rate(node_network_transmit_bytes_total{device!~"^tap.*"}[1m])) / node_network_speed_bytes{device!~"^tap.*"} > 0.8 < 10000
+        annotations:
+          value: '{{ $value }}'
+          summary: Host Network Interface Saturated (instance {{ $labels.instance }})
+          description: "The network interface \"{{ $labels.device }}\" on \"{{ $labels.instance }}\" is getting overloaded.\n  VALUE = {{ $value }}"
+
+      - alert: HostNetworkBondDegraded
+        expr: (node_bonding_active - node_bonding_slaves) != 0
+        for: 2m
+        labels:
+          severity: warning
+          expr: (node_bonding_active - node_bonding_slaves) != 0
+        annotations:
+          value: '{{ $value }}'
+          summary: Host Network Bond Degraded (instance {{ $labels.instance }})
+          description: "Bond \"{{ $labels.device }}\" degraded on \"{{ $labels.instance }}\".\n  VALUE = {{ $value }}"
+
+      - alert: HostConntrackLimit
+        expr: node_nf_conntrack_entries / node_nf_conntrack_entries_limit > 0.8
+        for: 5m
+        labels:
+          severity: warning
+          expr: node_nf_conntrack_entries / node_nf_conntrack_entries_limit > 0.8
+        annotations:
+          value: '{{ $value }}'
+          summary: Host conntrack limit (instance {{ $labels.instance }})
+          description: "The number of conntrack is approaching limit\n  VALUE = {{ $value }}"
+
+      - alert: HostTCPSocketsUsedTooMuch
+        expr: node_sockstat_TCP_alloc > 25000
+        for: 5m
+        labels:
+          severity: warning
+          expr: node_sockstat_TCP_alloc > 25000
+        annotations:
+          value: '{{ $value }}'
+          summary: Host used too much tcp sockets(instance {{ $labels.instance }})
+          description: "The number of TCP allocated is approaching limit\n  VALUE = {{ $value }}"
+
+      - alert: HostTCPSocketsUsedTooMuch
+        expr: node_sockstat_TCP_alloc > 35000
+        for: 5m
+        labels:
+          severity: critical
+          expr: node_sockstat_TCP_alloc > 35000
+        annotations:
+          value: '{{ $value }}'
+          summary: Host used too much tcp sockets(instance {{ $labels.instance }})
+          description: "The number of TCP allocated is approaching limit\n  VALUE = {{ $value }}"
+
+      - alert: HostTCPSocketsTimeWaitTooMuch
+        expr: node_sockstat_TCP_tw > 10000
+        for: 5m
+        labels:
+          severity: critical
+          expr: node_sockstat_TCP_tw > 10000
+        annotations:
+          value: '{{ $value }}'
+          summary: Host used too much tcp sockets(in time-wait phase) (instance {{ $labels.instance }})
+          description: "The number of TCP(in time-wait) is approaching limit\n  VALUE = {{ $value }}"
+
+      - alert: HostClockSkew
+        expr: (node_timex_offset_seconds > 0.05 and deriv(node_timex_offset_seconds[5m]) >= 0) or (node_timex_offset_seconds < -0.05 and deriv(node_timex_offset_seconds[5m]) <= 0)
+        for: 2m
+        labels:
+          severity: warning
+          expr: (node_timex_offset_seconds > 0.05 and deriv(node_timex_offset_seconds[5m]) >= 0) or (node_timex_offset_seconds < -0.05 and deriv(node_timex_offset_seconds[5m]) <= 0)
+        annotations:
+          value: '{{ $value }}'
+          summary: Host clock skew (instance {{ $labels.instance }})
+          description: "Clock skew detected. Clock is out of sync. Ensure NTP is configured correctly on this host.\n  VALUE = {{ $value }}"
+
+      # 2021.12.20 disabled: maybe false positive?
+      # - alert: HostClockNotSynchronising
+      #   expr: min_over_time(node_timex_sync_status[1m]) == 0 and node_timex_maxerror_seconds >= 16
+      #   for: 2m
+      #   labels:
+      #     severity: warning
+      #     expr: min_over_time(node_timex_sync_status[1m]) == 0 and node_timex_maxerror_seconds >= 16
+      #   annotations:
+      #     value: '{{ $value }}'
+      #     summary: Host clock not synchronising (instance {{ $labels.instance }})
+      #     description: "Clock not synchronising. Ensure NTP is configured on this host.\n  VALUE = {{ $value }}"

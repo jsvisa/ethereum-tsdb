@@ -1,0 +1,203 @@
+version: '2.1'
+
+networks:
+  monitor-net:
+    driver: bridge
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.37.0
+    container_name: prometheus
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - ./data/prometheus:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=30d'
+      - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
+      - '--web.external-url=http://${MONITOR_PROMETHEUS_EXTERNAL_HOST:-127.0.0.1}:9090'
+    restart: unless-stopped
+    expose:
+      - 9090
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: 'monitoring'
+
+  alertmanager:
+    image: prom/alertmanager:v0.24.0
+    container_name: alertmanager
+    volumes:
+      - ./alertmanager:/etc/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+      - '--web.external-url=http://${MONITOR_ALERTMANAGER_EXTERNAL_HOST:-127.0.0.1}:9093'
+    environment:
+      - ALERTMANAGER_EXTERNAL_HOST=${MONITOR_ALERTMANAGER_EXTERNAL_HOST:-127.0.0.1}
+    restart: unless-stopped
+    expose:
+      - 9093
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: 'monitoring'
+
+  nodeexporter:
+    image: prom/node-exporter:v1.3.1
+    container_name: nodeexporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    restart: unless-stopped
+    expose:
+      - 9100
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: 'monitoring'
+
+  blackbox:
+    image: prom/blackbox-exporter:v0.21.1
+    container_name: blackbox
+    volumes:
+      - ./blackbox:/etc/blackbox:ro
+    command:
+      - '--config.file=/etc/blackbox/blackbox.yml'
+    restart: unless-stopped
+    expose:
+      - 9115
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: 'monitoring'
+
+  grafana:
+    image: grafana/grafana:9.0.4
+    container_name: grafana
+    volumes:
+      - ./data/grafana:/var/lib/grafana
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+    environment:
+      - GF_SECURITY_ADMIN_USER=${MONITOR_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${MONITOR_ADMIN_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=${MONITOR_ADMIN_ALLOW_SIGN_UP:-false}
+    restart: unless-stopped
+    expose:
+      - 3000
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: 'monitoring'
+
+  redis-exporter:
+    image: oliver006/redis_exporter
+    container_name: redis-exporter
+    environment:
+      - REDIS_ADDR=${MONITOR_REDIS_ADDR}
+      - REDIS_EXPORTER_CHECK_KEYS=${MONITOR_REDIS_EXPORTER_CHECK_KEYS}
+      - REDIS_EXPORTER_CHECK_STREAMS=${MONITOR_REDIS_EXPORTER_CHECK_STREAMS}
+      - REDIS_EXPORTER_CHECK_SINGLE_STREAMS=${MONITOR_REDIS_EXPORTER_CHECK_SINGLE_STREAMS}
+    restart: unless-stopped
+    expose:
+      - 9121
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: 'monitoring'
+
+  graphql-exporter:
+    image: docker.io/ricardbejarano/graphql_exporter
+    container_name: graphql-exporter
+    expose:
+      - 9199
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: 'monitoring'
+
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:0.10.0
+    container_name: nginx-exporter
+    environment:
+      - SCRAPE_URI=${MONITOR_NGINX_ADDR}
+    restart: unless-stopped
+    expose:
+      - 9113
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: 'monitoring'
+
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:v0.12.0-rc.0
+    container_name: postgres-exporter
+    restart: unless-stopped
+    environment:
+      - DATA_SOURCE_NAME=${MONITOR_POSTGRES_DATABASE_URL}
+    expose:
+      - 9187
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: 'monitoring'
+
+  pushgateway:
+    image: prom/pushgateway:v1.4.3
+    container_name: pushgateway
+    restart: unless-stopped
+    expose:
+      - 9091
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: 'monitoring'
+
+  karma:
+    image: ghcr.io/prymitive/karma:v0.96
+    container_name: karma
+    restart: unless-stopped
+    command:
+      - '--listen.port=9092'
+      - '--alertmanager.uri=http://alertmanager:9093'
+      - '--alertmanager.external_uri=http://${MONITOR_ALERTMANAGER_EXTERNAL_HOST:-127.0.0.1}:9093'
+    environment:
+      - ALERTMANAGER_URI=http://${MONITOR_ALERTMANAGER_EXTERNAL_HOST:-127.0.0.1}:9093
+    expose:
+      - 9092
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: 'monitoring'
+
+  caddy:
+    image: caddy:2.3.0
+    container_name: caddy
+    ports:
+      - '3000:3000' # grafana
+      - '9090:9090' # prometheus
+      - '9091:9091' # push gatewar
+      - '9092:9092' # karma
+      - '9093:9093' # alertmanager
+    volumes:
+      - ./caddy:/etc/caddy
+    environment:
+      - ADMIN_USER=${MONITOR_ADMIN_USER:-admin}
+      - ADMIN_PASSWORD=${MONITOR_ADMIN_PASSWORD:-admin}
+      - ADMIN_PASSWORD_HASH=${MONITOR_ADMIN_PASSWORD_HASH:-}
+    restart: unless-stopped
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: 'monitoring'

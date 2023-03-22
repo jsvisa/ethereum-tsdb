@@ -1,0 +1,94 @@
+groups:
+  - name: Ethereum Geth monitoring
+    rules:
+      - alert: GethChainInsertsOutOfTime
+        expr: max_over_time(chain_inserts{quantile="0.95"}[10m])/1e9 > 10
+        for: 10m
+        labels:
+          severity: warning
+          chain: '{{ $labels.chain }}'
+        annotations:
+          value: '{{ $value }}'
+          summary: Geth Chain unusual insert latency(instance {{ $labels.instance }})
+          description: "Block insert latency is growing(> 10s)\n  VALUE = {{ $value }}"
+
+      # Fast sync will insert headers first, then insert block
+      # In the fast sync phase, only block headers are inserted into the local database,
+      # so the expr below always returns true:
+      # increase(chain_head_block{discover != 'no'}[30m]) < 10
+      - alert: GethChainOutOfSync
+        expr: increase(chain_head_header{discover != 'no', job !~ 'ropsten-.*'}[10m]) < 10 OR increase(chain_head_header{discover != 'no', job =~ 'ropsten-.*'}[60m]) < 10
+        for: 30m
+        labels:
+          severity: warning
+          chain: '{{ $labels.chain }}'
+        annotations:
+          value: '{{ $value }}'
+          summary: Geth Chain slowly sync speed(instance {{ $labels.instance }})
+          description: "Too little blocks inserted into db(<10 blocks in 10 minutes) \n  VALUE = {{ $value }}"
+
+      - alert: GethChainStopSync
+        expr: increase(chain_head_header{discover != 'no'}[10m]) < 1 and increase(chain_head_block{discover != 'no'}[10m]) < 1
+        for: 30m
+        labels:
+          severity: critical
+          chain: '{{ $labels.chain }}'
+        annotations:
+          value: '{{ $value }}'
+          summary: Geth Chain stopped synchronous(instance {{ $labels.instance }})
+          description: "Seems the client was stopped\n  VALUE = {{ $value }}"
+
+      - alert: GethChainNoPeers
+        expr: p2p_peers{discover != 'no'} < 5
+        for: 10m
+        labels:
+          severity: critical
+          chain: '{{ $labels.chain }}'
+        annotations:
+          value: '{{ $value }}'
+          summary: Geth Chain NO peers(instance {{ $labels.instance }})
+          description: "Too little peers are available(<5)\n  VALUE = {{ $value }}"
+
+      - alert: GethChainLevelDBWriteDelay
+        expr: increase(eth_db_chaindata_compact_writedelay_counter[1m]) > 0
+        for: 30m
+        labels:
+          severity: critical
+          chain: '{{ $labels.chain }}'
+        annotations:
+          value: '{{ $value }}'
+          summary: Geth Chain LevelDB compact writedelay occurred(instance {{ $labels.instance }})
+          description: "LevelDB compaction stops the world\n  VALUE = {{ $value }}"
+
+      # - alert: GethChainTrieCacheLowHitRate
+      #   expr: rate(trie_memcache_clean_hit[30m])*100/(rate(trie_memcache_clean_miss[30m])+rate(trie_memcache_clean_hit[30m])) < 80
+      #   for: 10m
+      #   labels:
+      #     severity: warning
+      #     chain: '{{ $labels.chain }}'
+      #   annotations:
+      #     value: '{{ $value }}'
+      #     summary: Geth Chain Trie memcache hitrate too low(instance {{ $labels.instance }})
+      #     description: "MPT Trie cache utilization too low(< 80)\n  VALUE = {{ $value }}"
+
+      # - alert: GethChainIOSlow
+      #   expr: max_over_time(system_cpu_syswait[1m]) > 80 and max_over_time(system_cpu_syswait[1m]) < 90
+      #   for: 10m
+      #   labels:
+      #     severity: warning
+      #     chain: '{{ $labels.chain }}'
+      #   annotations:
+      #     value: '{{ $value }}'
+      #     summary: Geth Chain IOWait(instance {{ $labels.instance }})
+      #     description: "Too much CPU wasted on disk read/write(>80%)\n  VALUE = {{ $value }}"
+      #
+      # - alert: GethChainIOTooSlow
+      #   expr: max_over_time(system_cpu_syswait[1m]) >= 90
+      #   for: 10m
+      #   labels:
+      #     severity: critical
+      #     chain: '{{ $labels.chain }}'
+      #   annotations:
+      #     value: '{{ $value }}'
+      #     summary: Geth Chain IOWait(instance {{ $labels.instance }})
+      #     description: "Too much CPU wasted on disk read/write(>50%)\n  VALUE = {{ $value }}"

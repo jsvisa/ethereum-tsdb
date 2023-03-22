@@ -1,0 +1,25 @@
+groups:
+  - name: Dump slow monitoring
+    rules:
+      - alert: ChainDumpNoUpdate
+        expr: chain_dump_lag and rate(chain_dump_lag{chain!='bitcoin'}[10m]) <= 0 or rate(chain_dump_lag{chain='bitcoin'}[1h]) <= 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: Dump lsp not updated (instance {{ $labels.chain }} {{ $labels.task }})
+          description: 'Task process maybe stopped'
+
+  - name: Load pending monitoring
+    rules:
+      - alert: ChainLoadPending
+        expr: sum by(db, group, instance, stream) (redis_stream_group_consumer_messages_pending) > 0
+        for: 30m
+        labels:
+          severity: warning
+          redis_stream: '{{ $labels.stream }}'
+          redis_group: '{{ $labels.group }}'
+        annotations:
+          value: '{{ $value }}'
+          summary: Chain Load in pending state (stream {{ $labels.stream }} {{ $labels.group }})
+          description: Redis stream consumer not acked the pending message

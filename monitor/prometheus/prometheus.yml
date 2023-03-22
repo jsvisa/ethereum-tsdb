@@ -1,0 +1,231 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+    monitor: chain-monitor
+
+# Load and evaluate rules in this file every evaluation_interval seconds.
+rule_files:
+  - alert.*.rules.yml
+  - record.*.rules.yml
+
+# A scrape configuration containing exactly one endpoint to scrape.
+scrape_configs:
+  - job_name: postgres_exporter
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+          - postgres-exporter:9187
+
+  - job_name: redis-exporter
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+          - redis://redis:6379
+    metrics_path: /scrape
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: redis-exporter:9121
+
+  - job_name: kvrocks_exporter
+    scrape_interval: 15s
+    static_configs:
+      - targets:
+          - kvrocks://kvrocks:6666
+    metrics_path: /scrape
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: kvrocks-exporter:9122
+
+  - job_name: nginx-exporter
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+          - nginx-exporter:9113
+
+  - job_name: nginxlog-exporter
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+          - nginx:8145
+
+  - job_name: graphnode
+    scrape_interval: 10s
+    static_configs:
+      - targets:
+          - graphnode:8040 # eth-graph
+          - graphnode:8140 # ftm-graph
+          - graphnode:8240 # bsc-graph
+
+  - job_name: subgraph-index/ethereum/eth2
+    metrics_path: '/query'
+    params:
+      endpoint:
+        - http://graphnode:8030/graphql # eth-graph
+      query:
+        - |
+          {
+            indexingStatusForCurrentVersion(subgraphName: "eth2") {
+              synced
+              health
+              entityCount
+              fatalError { message block { number hash } handler }
+              chains { network chainHeadBlock { number } latestBlock { number } } }
+          }
+    static_configs:
+      - targets: ['graphql-exporter:9199']
+        labels:
+          chain: ethereum
+          subgraph: eth2
+
+  - job_name: subgraph-index/fantom/beethovenx
+    metrics_path: '/query'
+    params:
+      endpoint:
+        - http://graphnode:8130/graphql # ftm-graph
+      query:
+        - |
+          {
+            indexingStatusForCurrentVersion(subgraphName: "beethovenx") {
+              synced
+              health
+              fatalError { message block { number hash } handler }
+              chains { network chainHeadBlock { number } latestBlock { number } } }
+          }
+    static_configs:
+      - targets: ['graphql-exporter:9199'] # graphql_exporter address:port
+        labels:
+          chain: fantom
+          subgraph: beethovenx
+
+  - job_name: chain_dump_exporter
+    scrape_interval: 30s
+    static_configs:
+      - targets:
+          - chain-dumper:9112
+
+  - job_name: nodeexporter
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+          - host1:9100
+          - host2:9100
+
+  - job_name: erigon
+    metrics_path: /debug/metrics/prometheus
+    scheme: http
+    static_configs:
+      - targets:
+          - eth-erigon:2103
+        labels:
+          chain: eth-erigon
+
+      - targets:
+          - bsc-erigon:2203
+        labels:
+          chain: bsc-erigon
+
+  - job_name: avalanche
+    metrics_path: /ext/metrics
+    scrape_interval: 10s
+    static_configs:
+      - targets:
+          - avalanche:9650
+        labels:
+          chain: avalanche
+
+  - job_name: go-ethereum
+    metrics_path: /debug/metrics/prometheus
+    scheme: http
+    static_configs:
+      - targets:
+          - geth1:16040 # geth-leveldb
+          - geth2:26040 # geth-pebble
+        labels:
+          chain: ethereum
+
+      - targets:
+          - bsc1:2033
+        labels:
+          chain: bsc
+
+  - job_name: prometheus
+    scrape_interval: 10s
+    static_configs:
+      - targets:
+          - localhost:9090
+
+  - job_name: pushgateway
+    scrape_interval: 10s
+    honor_labels: true
+    static_configs:
+      - targets:
+          - pushgateway:9091
+
+  - job_name: blackbox-web3
+    metrics_path: /probe
+    params:
+      module: [http_web3_2xx] # Look for a HTTP JSONRPC 2xx
+    static_configs:
+      - targets:
+          - http://bsc1:2031 # BSC archive-rw
+        labels:
+          chain: bsc
+          client: geth
+
+      - targets:
+          - http://geth2:24545 # Geth pebble
+        labels:
+          chain: ethereum
+          client: geth
+
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox:9115 # The blackbox exporter's real hostname:port.
+
+  - job_name: blackbox-tcp
+    metrics_path: /probe
+    params:
+      module: [tcp_connect] # Look for a TCP connect success
+    static_configs:
+      - targets:
+          - bsc1:2031 # BSC archive-rw
+        labels:
+          chain: bsc
+          client: geth
+
+      - targets:
+          - geth1:24545 # Geth pebble
+        labels:
+          chain: ethereum
+          client: geth
+
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox:9115 # The blackbox exporter's real hostname:port.
+
+alerting:
+  alertmanagers:
+    - scheme: http
+      static_configs:
+        - targets:
+            - alertmanager:9093

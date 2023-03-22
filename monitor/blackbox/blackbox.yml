@@ -1,0 +1,36 @@
+modules:
+  http_2xx:
+    prober: http
+    timeout: 5s
+
+  http_234:
+    prober: http
+    timeout: 5s
+    http:
+      valid_status_codes: [200, 204, 301, 302, 303, 400, 404, 405]
+
+  http_post_2xx:
+    prober: http
+    timeout: 5s
+    http:
+      method: POST
+
+  http_web3_2xx:
+    prober: http
+    timeout: 5s
+    http:
+      method: POST
+      headers:
+        Content-Type: application/json
+      body: '{ "jsonrpc":"2.0", "method":"web3_clientVersion", "params":[], "id":1 }'
+
+  tcp_connect:
+    prober: tcp
+  ssh_banner:
+    prober: tcp
+    tcp:
+      query_response:
+        - expect: '^SSH-2.0-'
+        - send: 'SSH-2.0-blackbox-ssh-check'
+  icmp:
+    prober: icmp

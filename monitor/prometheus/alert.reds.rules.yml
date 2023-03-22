@@ -1,0 +1,50 @@
+groups:
+  - name: redis
+    rules:
+      - alert: RedisDown
+        expr: redis_up == 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          description: |-
+            Redis instance is down
+              VALUE = {{ $value }}
+              LABELS: {{ $labels }}
+          summary: Redis down (instance {{ $labels.instance }})
+
+      - alert: RedisOutOfMemory
+        expr: redis_memory_used_bytes / redis_total_system_memory_bytes * 100 > 60
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          description: |-
+            Redis is running out of memory (> 60%)
+              VALUE = {{ $value }}
+              LABELS: {{ $labels }}
+          summary: Redis out of memory (instance {{ $labels.instance }})
+
+      - alert: RedisTooManyConnections
+        expr: redis_connected_clients > 2800
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          description: |-
+            Redis instance has too many connections
+              VALUE = {{ $value }}
+              LABELS: {{ $labels }}
+          summary: Redis too many connections (instance {{ $labels.instance }})
+
+      - alert: RedisIncreaseTooManyConnections
+        expr: rate(redis_connected_clients[1m]) > 100
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          description: |-
+            Redis instance increased too many connections
+              VALUE = {{ $value }}
+              LABELS: {{ $labels }}
+          summary: Redis increased too many connections (instance {{ $labels.instance }})

@@ -1,0 +1,99 @@
+#!/usr/bin/env bash
+
+set -e
+
+ERROR() {
+    echo -e "\e[101m\e[97m[ERROR]\e[49m\e[39m" "$@"
+}
+
+WARNING() {
+    echo -e "\e[101m\e[97m[WARNING]\e[49m\e[39m" "$@"
+}
+
+INFO() {
+    echo -e "\e[104m\e[97m[INFO]\e[49m\e[39m" "$@"
+}
+
+reload_alertmanager() {
+    docker exec -it alertmanager /bin/amtool check-config /etc/alertmanager/config.yml
+    prom=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' alertmanager)
+
+    curl -XPOST "http://${prom}:9093/-/reload"
+}
+
+reload_prometheus() {
+    docker exec -it prometheus /bin/promtool check config /etc/prometheus/prometheus.yml
+    prom=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' prometheus)
+
+    curl -XPOST "http://${prom}:9090/-/reload"
+}
+
+reload_blackbox() {
+    prom=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' blackbox)
+
+    curl -XPOST "http://${prom}:9115/-/reload"
+}
+
+HELP=0
+RELOAD_PROMETHEUS=0
+RELOAD_ALERTMANAGER=0
+RELOAD_BLACKBOX=0
+
+while [[ $# -gt 0 ]]
+do
+    key="$1"
+
+    case $key in
+        -h|--help)
+            HELP=1
+            shift # past argument
+            ;;
+        --prom|--prometheus)
+            RELOAD_PROMETHEUS=1
+            shift # past argument
+            ;;
+        --am|--alertmanager)
+            RELOAD_ALERTMANAGER=1
+            shift # past argument
+            ;;
+        --black)
+            RELOAD_BLACKBOX=1
+            shift # past argument
+            ;;
+        --all)
+            RELOAD_ALERTMANAGER=1
+            RELOAD_PROMETHEUS=1
+            RELOAD_BLACKBOX=1
+            shift # past value
+            ;;
+        *)
+            ERROR "unknown option $1"
+            shift # past argument
+            ;;
+    esac
+done
+
+if [ "${HELP}" -eq 1 ]; then
+    echo "Usage: $0 [OPTION]"
+    echo "  --help                                                Display this message"
+    echo "  --all                                                 Reload all monitor components"
+    echo "  --prom|--prometheus                                   Reload Prometheus only"
+    echo "  --am|--alertmanager                                   Reload Alertmanager"
+    echo "  --black                                               Reload Blackbox"
+    exit 0
+fi
+
+if [ "${RELOAD_PROMETHEUS}" -eq 1 ]; then
+    INFO "Reload Prometheus"
+    reload_prometheus
+fi
+
+if [ "${RELOAD_ALERTMANAGER}" -eq 1 ]; then
+    INFO "Reload Alertmanager"
+    reload_alertmanager
+fi
+
+if [ "${RELOAD_BLACKBOX}" -eq 1 ]; then
+    INFO "Reload Blackbox"
+    reload_blackbox
+fi
