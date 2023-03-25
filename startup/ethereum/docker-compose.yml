@@ -7,7 +7,7 @@ services:
     stop_signal: SIGINT
     stop_grace_period: 2m
     healthcheck:
-      test: ['CMD-SHELL', 'geth attach --exec eth.blockNumber']
+      test: ['CMD-SHELL', 'geth attach --exec eth.blockNumber /data/geth.ipc']
       interval: 10s
       timeout: 5s
       retries: 5
