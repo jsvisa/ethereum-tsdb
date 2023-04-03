@@ -63,7 +63,7 @@ services:
       - 6041:6041 # /debug/pprof
 
   prysm:
-    image: prysmaticlabs/prysm-beacon-chain:v3.2.2
+    image: prysmaticlabs/prysm-beacon-chain:v4.0.1
     container_name: prysm
     stop_grace_period: 2m
     depends_on:
@@ -72,7 +72,7 @@ services:
     command:
       - '--mainnet'
       - '--datadir=/data'
-      - '--http-web3provider=http://geth:4545'
+      - '--execution-endpoint=http://geth:4545'
       - '--rpc-host=0.0.0.0'
       - '--rpc-port=4000'
       - '--p2p-tcp-port=13005'
