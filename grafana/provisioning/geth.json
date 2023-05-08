@@ -119,7 +119,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "chain_head_header{instance=~\"$instance\"}",
+          "expr": "chain_head_header{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -217,7 +217,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "chain_head_header{instance=~\"$instance\"}",
+          "expr": "chain_head_header{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -230,7 +230,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "chain_head_receipt{instance=~\"$instance\"}",
+          "expr": "chain_head_receipt{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -243,7 +243,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "chain_head_block{instance=~\"$instance\"}",
+          "expr": "chain_head_block{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -318,7 +318,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "chain_reorg_add{instance=~\"$instance\"}",
+          "expr": "chain_reorg_add{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "range": true,
@@ -391,7 +391,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "txpool_pending{instance=~\"$instance\"}",
+          "expr": "txpool_pending{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -485,7 +485,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "txpool_pending{instance=~\"$instance\"}",
+          "expr": "txpool_pending{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "executable",
@@ -496,7 +496,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "txpool_queued{instance=~\"$instance\"}",
+          "expr": "txpool_queued{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "gapped",
@@ -507,7 +507,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "txpool_local{instance=~\"$instance\"}",
+          "expr": "txpool_local{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "local",
@@ -581,7 +581,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "chain_head_receipt{instance=~\"$instance\"}",
+          "expr": "chain_head_receipt{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -655,7 +655,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "txpool_local{instance=~\"$instance\"}",
+          "expr": "txpool_local{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -728,7 +728,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "chain_reorg_drop{instance=~\"$instance\"}",
+          "expr": "chain_reorg_drop{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "range": true,
@@ -802,7 +802,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "chain_head_block{instance=~\"$instance\"}",
+          "expr": "chain_head_block{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -876,7 +876,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "txpool_queued{instance=~\"$instance\"}",
+          "expr": "txpool_queued{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -971,7 +971,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "chain_execution{instance=~\"$instance\", quantile=\"$quantile\"}",
+          "expr": "chain_execution{chain=\"$chain\", instance=~\"$instance\", quantile=\"$quantile\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -983,7 +983,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "chain_validation{instance=~\"$instance\", quantile=\"$quantile\"}",
+          "expr": "chain_validation{chain=\"$chain\", instance=~\"$instance\", quantile=\"$quantile\"}",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -996,7 +996,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "chain_write{instance=~\"$instance\", quantile=\"$quantile\"}",
+          "expr": "chain_write{chain=\"$chain\", instance=~\"$instance\", quantile=\"$quantile\"}",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1008,7 +1008,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "chain_account_reads{instance=~\"$instance\", quantile=\"$quantile\"}",
+          "expr": "chain_account_reads{chain=\"$chain\", instance=~\"$instance\", quantile=\"$quantile\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "account read (q=$quantile)",
@@ -1019,7 +1019,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "chain_account_updates{instance=~\"$instance\", quantile=\"$quantile\"}",
+          "expr": "chain_account_updates{chain=\"$chain\", instance=~\"$instance\", quantile=\"$quantile\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "account update (q=$quantile)",
@@ -1030,7 +1030,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "chain_account_hashes{instance=~\"$instance\", quantile=\"$quantile\"}",
+          "expr": "chain_account_hashes{chain=\"$chain\", instance=~\"$instance\", quantile=\"$quantile\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "account hashe (q=$quantile)",
@@ -1041,7 +1041,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "chain_account_commits{instance=~\"$instance\", quantile=\"$quantile\"}",
+          "expr": "chain_account_commits{chain=\"$chain\", instance=~\"$instance\", quantile=\"$quantile\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "account commit (q=$quantile)",
@@ -1052,7 +1052,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "chain_storage_reads{instance=~\"$instance\", quantile=\"$quantile\"}",
+          "expr": "chain_storage_reads{chain=\"$chain\", instance=~\"$instance\", quantile=\"$quantile\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "storage read (q=$quantile)",
@@ -1063,7 +1063,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "chain_storage_updates{instance=~\"$instance\", quantile=\"$quantile\"}",
+          "expr": "chain_storage_updates{chain=\"$chain\", instance=~\"$instance\", quantile=\"$quantile\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "storage update (q=$quantile)",
@@ -1074,7 +1074,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "chain_storage_hashes{instance=~\"$instance\", quantile=\"$quantile\"}",
+          "expr": "chain_storage_hashes{chain=\"$chain\", instance=~\"$instance\", quantile=\"$quantile\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "storage hashe (q=$quantile)",
@@ -1086,7 +1086,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "chain_storage_commits{instance=~\"$instance\", quantile=\"$quantile\"}",
+          "expr": "chain_storage_commits{chain=\"$chain\", instance=~\"$instance\", quantile=\"$quantile\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1099,7 +1099,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "chain_snapshot_commits{instance=~\"$instance\", quantile=\"$quantile\"}",
+          "expr": "chain_snapshot_commits{chain=\"$chain\", instance=~\"$instance\", quantile=\"$quantile\"}",
           "hide": false,
           "interval": "",
           "legendFormat": "snapshot commit (q=$quantile)",
@@ -1194,7 +1194,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "rate(txpool_valid{instance=~\"$instance\"}[1m])",
+          "expr": "rate(txpool_valid{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "valid",
@@ -1205,7 +1205,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "rate(txpool_invalid{instance=~\"$instance\"}[1m])",
+          "expr": "rate(txpool_invalid{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "invalid",
@@ -1216,7 +1216,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "rate(txpool_underpriced{instance=~\"$instance\"}[1m])",
+          "expr": "rate(txpool_underpriced{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -1229,7 +1229,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "rate(txpool_pending_discard{instance=~\"$instance\"}[1m])",
+          "expr": "rate(txpool_pending_discard{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1241,7 +1241,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "rate(txpool_pending_replace{instance=~\"$instance\"}[1m])",
+          "expr": "rate(txpool_pending_replace{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "executable replace",
@@ -1252,7 +1252,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "rate(txpool_pending_ratelimit{instance=~\"$instance\"}[1m])",
+          "expr": "rate(txpool_pending_ratelimit{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "executable ratelimit",
@@ -1263,7 +1263,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "rate(txpool_pending_nofunds{instance=~\"$instance\"}[1m])",
+          "expr": "rate(txpool_pending_nofunds{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "executable nofunds",
@@ -1274,7 +1274,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "rate(txpool_queued_discard{instance=~\"$instance\"}[1m])",
+          "expr": "rate(txpool_queued_discard{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1286,7 +1286,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "rate(txpool_queued_replace{instance=~\"$instance\"}[1m])",
+          "expr": "rate(txpool_queued_replace{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1298,7 +1298,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "rate(txpool_queued_ratelimit{instance=~\"$instance\"}[1m])",
+          "expr": "rate(txpool_queued_ratelimit{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1310,7 +1310,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "rate(txpool_queued_nofunds{instance=~\"$instance\"}[1m])",
+          "expr": "rate(txpool_queued_nofunds{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1323,7 +1323,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "rate(txpool_known{instance=~\"$instance\"}[1m])",
+          "expr": "rate(txpool_known{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": false,
           "legendFormat": "known",
           "range": true,
@@ -1980,7 +1980,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "avg(system_cpu_sysload{instance=~\"$instance\"}) by (instance)",
+          "expr": "avg(system_cpu_sysload{chain=\"$chain\", instance=~\"$instance\"}) by (instance)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1993,7 +1993,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "avg(system_cpu_syswait{instance=~\"$instance\"}) by (instance)",
+          "expr": "avg(system_cpu_syswait{chain=\"$chain\", instance=~\"$instance\"}) by (instance)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -2006,7 +2006,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "avg(system_cpu_procload{instance=~\"$instance\"}) by (instance)",
+          "expr": "avg(system_cpu_procload{chain=\"$chain\", instance=~\"$instance\"}) by (instance)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -2019,7 +2019,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "avg(system_cpu_goroutines{instance=~\"$instance\"}) by (instance)",
+          "expr": "avg(system_cpu_goroutines{chain=\"$chain\", instance=~\"$instance\"}) by (instance)",
           "hide": false,
           "interval": "",
           "legendFormat": "goroutines",
@@ -2031,7 +2031,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "avg(system_cpu_threads{instance=~\"$instance\"}) by (instance)",
+          "expr": "avg(system_cpu_threads{chain=\"$chain\", instance=~\"$instance\"}) by (instance)",
           "hide": false,
           "interval": "",
           "legendFormat": "threads",
@@ -2149,7 +2149,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(system_memory_allocs{instance=~\"$instance\"}[1m])",
+          "expr": "rate(system_memory_allocs{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -2163,7 +2163,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "system_memory_used{instance=~\"$instance\"}",
+          "expr": "system_memory_used{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -2177,7 +2177,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "system_memory_held{instance=~\"$instance\"}",
+          "expr": "system_memory_held{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -2191,7 +2191,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "system_memory_frees{instance=~\"$instance\"}",
+          "expr": "system_memory_frees{chain=\"$chain\", instance=~\"$instance\"}",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -2204,7 +2204,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "system_memory_pauses{instance=~\"$instance\"}",
+          "expr": "system_memory_pauses{chain=\"$chain\", instance=~\"$instance\"}",
           "hide": true,
           "interval": "",
           "legendFormat": "pause",
@@ -2299,7 +2299,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(system_disk_readbytes{instance=~\"$instance\"}[1m])",
+          "expr": "rate(system_disk_readbytes{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -2312,7 +2312,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(system_disk_writebytes{instance=~\"$instance\"}[1m])",
+          "expr": "rate(system_disk_writebytes{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -2452,7 +2452,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "rate(p2p_ingress{instance=~\"$instance\"}[1m])",
+          "expr": "rate(p2p_ingress{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -2467,7 +2467,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "rate(p2p_egress{instance=~\"$instance\"}[1m])",
+          "expr": "rate(p2p_egress{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -2481,7 +2481,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "p2p_ingress{instance=~\"$instance\"}",
+          "expr": "p2p_ingress{chain=\"$chain\", instance=~\"$instance\"}",
           "hide": false,
           "legendFormat": "igress-flow",
           "range": true,
@@ -2493,7 +2493,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "p2p_egress{instance=~\"$instance\"}",
+          "expr": "p2p_egress{chain=\"$chain\", instance=~\"$instance\"}",
           "hide": false,
           "legendFormat": "egress-flow",
           "range": true,
@@ -2588,7 +2588,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "p2p_peers{instance=~\"$instance\"}",
+          "expr": "p2p_peers{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -2601,7 +2601,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(p2p_dials{instance=~\"$instance\"}[1m])",
+          "expr": "rate(p2p_dials{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -2614,7 +2614,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(p2p_serves{instance=~\"$instance\"}[1m])",
+          "expr": "rate(p2p_serves{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -2724,7 +2724,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_downloader_throttle{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_downloader_throttle{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -2843,7 +2843,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "eth_downloader_throttle{instance=~\"$instance\"}",
+          "expr": "eth_downloader_throttle{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "hide": true,
           "interval": "",
@@ -2857,7 +2857,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_downloader_bodies_in{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_downloader_bodies_in{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "bodies in",
@@ -2869,7 +2869,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_downloader_headers_in{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_downloader_headers_in{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "headers in",
@@ -2881,7 +2881,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_downloader_receipts_in{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_downloader_receipts_in{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "receipts in",
@@ -2893,7 +2893,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "eth_downloader_bodies_drop{instance=~\"$instance\"}",
+          "expr": "eth_downloader_bodies_drop{chain=\"$chain\", instance=~\"$instance\"}",
           "hide": true,
           "interval": "",
           "legendFormat": "bodies drop",
@@ -2905,7 +2905,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "eth_downloader_headers_drop{instance=~\"$instance\"}",
+          "expr": "eth_downloader_headers_drop{chain=\"$chain\", instance=~\"$instance\"}",
           "hide": true,
           "interval": "",
           "legendFormat": "headers drop",
@@ -2917,7 +2917,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "eth_downloader_receipts_drop{instance=~\"$instance\"}",
+          "expr": "eth_downloader_receipts_drop{chain=\"$chain\", instance=~\"$instance\"}",
           "hide": true,
           "interval": "",
           "legendFormat": "receipts drop",
@@ -2929,7 +2929,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "eth_downloader_bodies_timeout{instance=~\"$instance\"}",
+          "expr": "eth_downloader_bodies_timeout{chain=\"$chain\", instance=~\"$instance\"}",
           "hide": true,
           "interval": "",
           "legendFormat": "bodies timeout",
@@ -2941,7 +2941,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "eth_downloader_headers_timeout{instance=~\"$instance\"}",
+          "expr": "eth_downloader_headers_timeout{chain=\"$chain\", instance=~\"$instance\"}",
           "hide": true,
           "interval": "",
           "legendFormat": "headers timeout",
@@ -2953,7 +2953,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "eth_downloader_receipts_timeout{instance=~\"$instance\"}",
+          "expr": "eth_downloader_receipts_timeout{chain=\"$chain\", instance=~\"$instance\"}",
           "hide": true,
           "interval": "",
           "legendFormat": "receipts timeout",
@@ -3049,7 +3049,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "eth_downloader_throttle{instance=~\"$instance\"}",
+          "expr": "eth_downloader_throttle{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "hide": true,
           "interval": "",
@@ -3063,7 +3063,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_downloader_bodies_in{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_downloader_bodies_in{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": true,
           "interval": "",
           "legendFormat": "bodies in",
@@ -3075,7 +3075,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_downloader_headers_in{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_downloader_headers_in{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": true,
           "interval": "",
           "legendFormat": "headers in",
@@ -3087,7 +3087,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_downloader_receipts_in{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_downloader_receipts_in{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": true,
           "interval": "",
           "legendFormat": "receipts in",
@@ -3099,7 +3099,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "eth_downloader_bodies_drop{instance=~\"$instance\"}",
+          "expr": "eth_downloader_bodies_drop{chain=\"$chain\", instance=~\"$instance\"}",
           "hide": false,
           "interval": "",
           "legendFormat": "bodies drop",
@@ -3111,7 +3111,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "eth_downloader_headers_drop{instance=~\"$instance\"}",
+          "expr": "eth_downloader_headers_drop{chain=\"$chain\", instance=~\"$instance\"}",
           "hide": false,
           "interval": "",
           "legendFormat": "headers drop",
@@ -3123,7 +3123,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "eth_downloader_receipts_drop{instance=~\"$instance\"}",
+          "expr": "eth_downloader_receipts_drop{chain=\"$chain\", instance=~\"$instance\"}",
           "hide": false,
           "interval": "",
           "legendFormat": "receipts drop",
@@ -3135,7 +3135,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "eth_downloader_bodies_timeout{instance=~\"$instance\"}",
+          "expr": "eth_downloader_bodies_timeout{chain=\"$chain\", instance=~\"$instance\"}",
           "hide": false,
           "interval": "",
           "legendFormat": "bodies timeout",
@@ -3147,7 +3147,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "eth_downloader_headers_timeout{instance=~\"$instance\"}",
+          "expr": "eth_downloader_headers_timeout{chain=\"$chain\", instance=~\"$instance\"}",
           "hide": false,
           "interval": "",
           "legendFormat": "headers timeout",
@@ -3159,7 +3159,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "eth_downloader_receipts_timeout{instance=~\"$instance\"}",
+          "expr": "eth_downloader_receipts_timeout{chain=\"$chain\", instance=~\"$instance\"}",
           "hide": false,
           "interval": "",
           "legendFormat": "receipts timeout",
@@ -3254,7 +3254,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_downloader_bodies_req{instance=~\"$instance\", quantile=\"$quantile\"}[1m])",
+          "expr": "rate(eth_downloader_bodies_req{chain=\"$chain\", instance=~\"$instance\", quantile=\"$quantile\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "bodies(q={{quantile}})",
@@ -3266,7 +3266,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_downloader_headers_req{instance=~\"$instance\", quantile=\"$quantile\"}[1m])",
+          "expr": "rate(eth_downloader_headers_req{chain=\"$chain\", instance=~\"$instance\", quantile=\"$quantile\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "headers(q={{quantile}})",
@@ -3278,7 +3278,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_downloader_receipts_req{instance=~\"$instance\", quantile=\"$quantile\"}[1m])",
+          "expr": "rate(eth_downloader_receipts_req{chain=\"$chain\", instance=~\"$instance\", quantile=\"$quantile\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "receipts(q={{quantile}})",
@@ -3367,7 +3367,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "eth_fetcher_transaction_waiting_peers{instance=~\"$instance\"}",
+          "expr": "eth_fetcher_transaction_waiting_peers{chain=\"$chain\", instance=~\"$instance\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -3429,7 +3429,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "eth_fetcher_transaction_waiting_hashes{instance=~\"$instance\"}",
+          "expr": "eth_fetcher_transaction_waiting_hashes{chain=\"$chain\", instance=~\"$instance\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -3491,7 +3491,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "eth_fetcher_transaction_queueing_peers{instance=~\"$instance\"}",
+          "expr": "eth_fetcher_transaction_queueing_peers{chain=\"$chain\", instance=~\"$instance\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -3549,7 +3549,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "eth_fetcher_transaction_queueing_hashes{instance=~\"$instance\"}",
+          "expr": "eth_fetcher_transaction_queueing_hashes{chain=\"$chain\", instance=~\"$instance\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -3611,7 +3611,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "eth_fetcher_transaction_fetching_peers{instance=~\"$instance\"}",
+          "expr": "eth_fetcher_transaction_fetching_peers{chain=\"$chain\", instance=~\"$instance\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -3669,7 +3669,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "eth_fetcher_transaction_fetching_hashes{instance=~\"$instance\"}",
+          "expr": "eth_fetcher_transaction_fetching_hashes{chain=\"$chain\", instance=~\"$instance\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -3764,7 +3764,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_fetcher_transaction_request_out{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_fetcher_transaction_request_out{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "request out",
@@ -3776,7 +3776,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_fetcher_transaction_request_fail{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_fetcher_transaction_request_fail{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "request fail",
@@ -3788,7 +3788,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_fetcher_transaction_request_done{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_fetcher_transaction_request_done{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "request done",
@@ -3800,7 +3800,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_fetcher_transaction_request_timeout{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_fetcher_transaction_request_timeout{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "request timeout",
@@ -3812,7 +3812,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_fetcher_transaction_replies_in{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_fetcher_transaction_replies_in{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "replies in",
@@ -3824,7 +3824,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_fetcher_transaction_replies_known{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_fetcher_transaction_replies_known{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "replies known",
@@ -3836,7 +3836,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_fetcher_transaction_replies_underpriced{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_fetcher_transaction_replies_underpriced{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "replies underpriced",
@@ -3848,7 +3848,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_fetcher_transaction_replies_otherreject{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_fetcher_transaction_replies_otherreject{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "replies otherreject",
@@ -3965,7 +3965,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_fetcher_block_bodies{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_fetcher_block_bodies{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "bodies",
@@ -3977,7 +3977,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_fetcher_block_headers{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_fetcher_block_headers{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "headers",
@@ -3989,7 +3989,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_fetcher_block_filter_headers_in{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_fetcher_block_filter_headers_in{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "filter headers in",
@@ -4001,7 +4001,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_fetcher_block_filter_headers_out{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_fetcher_block_filter_headers_out{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "filter headers out",
@@ -4013,7 +4013,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_fetcher_block_filter_bodies_in{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_fetcher_block_filter_bodies_in{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "filter bodies in",
@@ -4025,7 +4025,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_fetcher_block_filter_bodies_out{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_fetcher_block_filter_bodies_out{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "filter bodies out",
@@ -4147,7 +4147,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "rate(eth_db_chaindata_disk_read{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_db_chaindata_disk_read{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -4161,7 +4161,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "rate(eth_db_chaindata_disk_write{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_db_chaindata_disk_write{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "ethdb write",
@@ -4175,7 +4175,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "rate(eth_db_chaindata_ancient_read{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_db_chaindata_ancient_read{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -4189,7 +4189,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "rate(eth_db_chaindata_ancient_write{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_db_chaindata_ancient_write{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "ancient write",
@@ -4202,7 +4202,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_db_chaindata_compact_input{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_db_chaindata_compact_input{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "compact read",
@@ -4214,7 +4214,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_db_chaindata_compact_output{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_db_chaindata_compact_output{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "compact write",
@@ -4308,7 +4308,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "eth_db_chaindata_disk_read{instance=~\"$instance\"}",
+          "expr": "eth_db_chaindata_disk_read{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "leveldb read",
@@ -4319,7 +4319,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "eth_db_chaindata_disk_write{instance=~\"$instance\"}",
+          "expr": "eth_db_chaindata_disk_write{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "leveldb write",
@@ -4330,7 +4330,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "eth_db_chaindata_ancient_read{instance=~\"$instance\"}",
+          "expr": "eth_db_chaindata_ancient_read{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "ancient read",
@@ -4341,7 +4341,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "eth_db_chaindata_ancient_write{instance=~\"$instance\"}",
+          "expr": "eth_db_chaindata_ancient_write{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "ancient write",
@@ -4435,7 +4435,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "eth_db_chaindata_disk_size{instance=~\"$instance\"}",
+          "expr": "eth_db_chaindata_disk_size{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "leveldb",
@@ -4446,7 +4446,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "eth_db_chaindata_ancient_size{instance=~\"$instance\"}",
+          "expr": "eth_db_chaindata_ancient_size{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "ancient",
@@ -4524,7 +4524,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "eth_db_chaindata_compact_writedelay_counter{instance=~\"$instance\"}",
+          "expr": "eth_db_chaindata_compact_writedelay_counter{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -4657,7 +4657,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_db_chaindata_compact_time{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_db_chaindata_compact_time{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -4670,7 +4670,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_db_chaindata_compact_nonlevel0{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_db_chaindata_compact_nonlevel0{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -4683,7 +4683,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_db_chaindata_compact_level0{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_db_chaindata_compact_level0{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -4696,7 +4696,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_db_chaindata_compact_memory{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_db_chaindata_compact_memory{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -4709,7 +4709,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_db_chaindata_compact_seek{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_db_chaindata_compact_seek{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "seek",
@@ -4721,7 +4721,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_db_chaindata_compact_writedelay_duration{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_db_chaindata_compact_writedelay_duration{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "delay time",
@@ -4733,7 +4733,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(eth_db_chaindata_compact_writedelay_counter{instance=~\"$instance\"}[1m])",
+          "expr": "rate(eth_db_chaindata_compact_writedelay_counter{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "delay count",
@@ -4823,7 +4823,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "eth_db_chaindata_compact_writedelay_duration{instance=~\"$instance\"}",
+          "expr": "eth_db_chaindata_compact_writedelay_duration{chain=\"$chain\", instance=~\"$instance\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -4944,7 +4944,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "rate(trie_memcache_clean_read{instance=~\"$instance\"}[1m])",
+          "expr": "rate(trie_memcache_clean_read{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -4959,7 +4959,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "rate(trie_memcache_clean_write{instance=~\"$instance\"}[1m])",
+          "expr": "rate(trie_memcache_clean_write{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -5053,7 +5053,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "rate(trie_memcache_gc_size{instance=~\"$instance\"}[1m])",
+          "expr": "rate(trie_memcache_gc_size{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -5065,7 +5065,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "rate(trie_memcache_flush_size{instance=~\"$instance\"}[1m])",
+          "expr": "rate(trie_memcache_flush_size{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -5077,7 +5077,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "rate(trie_memcache_commit_size{instance=~\"$instance\"}[1m])",
+          "expr": "rate(trie_memcache_commit_size{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "commit",
@@ -5197,7 +5197,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(trie_memcache_clean_hit{instance=~\"$instance\"}[1m])",
+          "expr": "rate(trie_memcache_clean_hit{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -5211,7 +5211,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(trie_memcache_clean_miss{instance=~\"$instance\"}[1m])",
+          "expr": "rate(trie_memcache_clean_miss{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -5225,7 +5225,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(trie_memcache_clean_hit{instance=~\"$instance\"}[1m])/(rate(trie_memcache_clean_miss{instance=~\"$instance\"}[1m])+rate(trie_memcache_clean_hit{instance=~\"$instance\"}[1m]))",
+          "expr": "rate(trie_memcache_clean_hit{chain=\"$chain\", instance=~\"$instance\"}[1m])/(rate(trie_memcache_clean_miss{chain=\"$chain\", instance=~\"$instance\"}[1m])+rate(trie_memcache_clean_hit{chain=\"$chain\", instance=~\"$instance\"}[1m]))",
           "hide": false,
           "interval": "",
           "legendFormat": "hit rate",
@@ -5345,7 +5345,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(trie_memcache_dirty_hit{instance=~\"$instance\"}[1m])",
+          "expr": "rate(trie_memcache_dirty_hit{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -5359,7 +5359,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(trie_memcache_dirty_miss{instance=~\"$instance\"}[1m])",
+          "expr": "rate(trie_memcache_dirty_miss{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -5373,7 +5373,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(trie_memcache_dirty_hit{instance=~\"$instance\"}[1m])/(rate(trie_memcache_dirty_miss{instance=~\"$instance\"}[1m])+rate(trie_memcache_dirty_hit{instance=~\"$instance\"}[1m]))",
+          "expr": "rate(trie_memcache_dirty_hit{chain=\"$chain\", instance=~\"$instance\"}[1m])/(rate(trie_memcache_dirty_miss{chain=\"$chain\", instance=~\"$instance\"}[1m])+rate(trie_memcache_dirty_hit{chain=\"$chain\", instance=~\"$instance\"}[1m]))",
           "hide": false,
           "interval": "",
           "legendFormat": "hit rate",
@@ -5466,7 +5466,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(trie_memcache_gc_nodes{instance=~\"$instance\"}[1m])",
+          "expr": "rate(trie_memcache_gc_nodes{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -5480,7 +5480,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(trie_memcache_commit_nodes{instance=~\"$instance\"}[1m])",
+          "expr": "rate(trie_memcache_commit_nodes{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -5494,7 +5494,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(trie_memcache_flush_nodes{instance=~\"$instance\"}[1m])",
+          "expr": "rate(trie_memcache_flush_nodes{chain=\"$chain\", instance=~\"$instance\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "overflow",
@@ -5587,7 +5587,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(trie_memcache_gc_time{instance=~\"$instance\", quantile=~\"$quantile\"}[1m])",
+          "expr": "rate(trie_memcache_gc_time{chain=\"$chain\", instance=~\"$instance\", quantile=~\"$quantile\"}[1m])",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -5601,7 +5601,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(trie_memcache_commit_time{instance=~\"$instance\", quantile=~\"$quantile\"}[1m])",
+          "expr": "rate(trie_memcache_commit_time{chain=\"$chain\", instance=~\"$instance\", quantile=~\"$quantile\"}[1m])",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -5615,7 +5615,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "rate(trie_memcache_flush_time{instance=~\"$instance\", quantile=~\"$quantile\"}[1m])",
+          "expr": "rate(trie_memcache_flush_time{chain=\"$chain\", instance=~\"$instance\", quantile=~\"$quantile\"}[1m])",
           "hide": false,
           "interval": "",
           "legendFormat": "overflow",
