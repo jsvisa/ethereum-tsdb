@@ -7,6 +7,7 @@ Ethereum ETL Schema based on TimescaleDB
 find a valid timescaledb image from https://hub.docker.com/r/timescale/timescaledb-ha
 
 ```bash
+TS_VERSION=pg15-ts2.11 VERSION=pg15-ts2.11-v0.4 make build-image
 TS_VERSION=pg15-ts2.9-latest VERSION=pg15-ts2.9-v0.3 make build-image
 TS_VERSION=pg14-ts2.9-latest VERSION=pg14-ts2.9-v0.2 make build-image
 ```
