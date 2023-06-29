@@ -2,7 +2,7 @@ version: '3'
 
 services:
   geth:
-    image: ethereum/client-go:v1.11.5
+    image: ethereum/client-go:v1.12.0
     container_name: geth
     stop_signal: SIGINT
     stop_grace_period: 2m
@@ -63,16 +63,16 @@ services:
       - 6041:6041 # /debug/pprof
 
   prysm:
-    image: prysmaticlabs/prysm-beacon-chain:v4.0.1
+    image: prysmaticlabs/prysm-beacon-chain:v4.0.6
     container_name: prysm
     stop_grace_period: 2m
     depends_on:
       geth:
         condition: service_healthy
     command:
+      - '--accept-terms-of-use'
       - '--mainnet'
       - '--datadir=/data'
-      - '--execution-endpoint=http://geth:4545'
       - '--rpc-host=0.0.0.0'
       - '--rpc-port=4000'
       - '--p2p-tcp-port=13005'
@@ -80,7 +80,6 @@ services:
       - '--monitoring-host=0.0.0.0'
       - '--execution-endpoint=http://geth:8551'
       - '--jwt-secret=/jwt/jwt.hex'
-      - '--accept-terms-of-use'
       - '--grpc-gateway-host=0.0.0.0'
       - '--grpc-gateway-port=3500'
       - '--grpc-gateway-corsdomain=*'
