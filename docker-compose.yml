@@ -31,3 +31,16 @@ services:
     restart: unless-stopped
     ports:
       - '5432:5432'
+
+  pgcat:
+    image: ghcr.io/postgresml/pgcat:latest
+    container_name: pgcat
+    command:
+      - 'pgcat'
+      - '/etc/pgcat/pgcat.toml'
+    volumes:
+      - ./etc/pgcat.toml:/etc/pgcat/pgcat.toml
+    restart: unless-stopped
+    ports:
+      - '6432:6432'
+      - '9930:9930'
