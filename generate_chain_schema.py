@@ -23,7 +23,11 @@ def main():
         action="store_true",
         help="Create {from,to,token}_address related index",
     )
-
+    parser.add_argument(
+        "--create-blknum-index",
+        action="store_true",
+        help="Create block number related index",
+    )
     args = parser.parse_args()
 
     with open(args.template_file) as fr:
@@ -32,6 +36,7 @@ def main():
         chain=args.chain,
         is_timescale_db=args.timescale_db,
         create_address_index=args.create_address_index,
+        create_blknum_index=args.create_blknum_index,
     )
     print(result)
 

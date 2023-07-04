@@ -70,8 +70,10 @@ CREATE TABLE IF NOT EXISTS {{ chain }}.txs (
 
     PRIMARY KEY (item_id, block_timestamp)
 );
+{% if create_blknum_index is true %}
 CREATE INDEX IF NOT EXISTS {{ chain }}_txs_txhash_idx ON {{ chain }}.txs(txhash);
 CREATE INDEX IF NOT EXISTS {{ chain }}_txs_blknum_idx ON {{ chain }}.txs(blknum);
+{% endif %}
 {% if create_address_index is true %}
 CREATE INDEX IF NOT EXISTS {{ chain }}_txs_from_addr_st_idx ON {{ chain }}.txs(from_address, block_timestamp);
 CREATE INDEX IF NOT EXISTS {{ chain }}_txs_to_addr_st_idx ON {{ chain }}.txs(to_address, block_timestamp);
@@ -83,6 +85,7 @@ ALTER TABLE {{ chain }}.txs SET(timescaledb.compress, timescaledb.compress_segme
 SELECT add_compression_policy('{{ chain }}.txs', INTERVAL '30 days', if_not_exists => true);
 {% endif %}
 
+{% if create_txpool_table %}
 CREATE TABLE IF NOT EXISTS {{ chain }}.txpools (
     id                          BIGSERIAL,
     block_timestamp             TIMESTAMP,  -- The current timestamp
@@ -114,6 +117,7 @@ CREATE INDEX IF NOT EXISTS {{ chain }}_txpools_to_addr_st_idx ON {{ chain }}.txp
 SELECT create_hypertable('{{ chain }}.txpools', 'block_timestamp', if_not_exists => true);
 SELECT add_retention_policy('{{ chain }}.txpools', INTERVAL '6 hours', if_not_exists => true);
 {% endif %}
+{% endif %}
 
 CREATE TABLE IF NOT EXISTS {{ chain }}.traces (
     id                          BIGSERIAL,
@@ -143,8 +147,10 @@ CREATE TABLE IF NOT EXISTS {{ chain }}.traces (
 
     PRIMARY KEY (item_id, block_timestamp)
 );
+{% if create_blknum_index is true %}
 CREATE INDEX IF NOT EXISTS {{ chain }}_traces_blknum_idx ON {{ chain }}.traces(blknum);
 CREATE INDEX IF NOT EXISTS {{ chain }}_traces_txhash_idx ON {{ chain }}.traces(txhash);
+{% endif %}
 {% if create_address_index is true %}
 CREATE INDEX IF NOT EXISTS {{ chain }}_traces_from_addr_st_idx ON {{ chain }}.traces(from_address, block_timestamp);
 CREATE INDEX IF NOT EXISTS {{ chain }}_traces_to_addr_st_idx ON {{ chain }}.traces(to_address, block_timestamp);
@@ -179,8 +185,10 @@ CREATE TABLE IF NOT EXISTS {{ chain }}.logs (
 
     PRIMARY KEY (item_id, block_timestamp)
 );
+{% if create_blknum_index is true %}
 CREATE INDEX IF NOT EXISTS {{ chain }}_logs_blknum_idx ON {{ chain }}.logs(blknum);
 CREATE INDEX IF NOT EXISTS {{ chain }}_logs_txhash_idx ON {{ chain }}.logs(txhash);
+{% endif %}
 {% if create_address_index is true %}
 CREATE INDEX IF NOT EXISTS {{ chain }}_logs_address_st_idx ON {{ chain }}.logs(address, block_timestamp);
 {% endif %}
@@ -281,6 +289,7 @@ ALTER TABLE {{ chain }}.token_xfers SET(timescaledb.compress, timescaledb.compre
 SELECT add_compression_policy('{{ chain }}.token_xfers', INTERVAL '30 days', if_not_exists => true);
 {% endif %}
 
+{% if create_erc721_xfers_table %}
 CREATE TABLE IF NOT EXISTS {{ chain }}.erc721_xfers (
     id                          BIGSERIAL,
     block_timestamp             TIMESTAMP,
@@ -314,7 +323,9 @@ SELECT create_hypertable('{{ chain }}.erc721_xfers', 'block_timestamp', if_not_e
 ALTER TABLE {{ chain }}.erc721_xfers SET(timescaledb.compress, timescaledb.compress_segmentby = 'blknum', timescaledb.compress_orderby = 'item_id, block_timestamp asc');
 SELECT add_compression_policy('{{ chain }}.erc721_xfers', INTERVAL '30 days', if_not_exists => true);
 {% endif %}
+{% endif %}
 
+{% if create_erc1155_xfers_table %}
 CREATE TABLE IF NOT EXISTS {{ chain }}.erc1155_xfers (
     id                          BIGSERIAL,
     block_timestamp             TIMESTAMP,
@@ -352,4 +363,5 @@ CREATE INDEX IF NOT EXISTS {{ chain }}_erc1155_xfers_to_addr_st_idx ON {{ chain 
 SELECT create_hypertable('{{ chain }}.erc1155_xfers', 'block_timestamp', if_not_exists => true);
 ALTER TABLE {{ chain }}.erc1155_xfers SET(timescaledb.compress, timescaledb.compress_segmentby = 'blknum', timescaledb.compress_orderby = 'item_id, block_timestamp asc');
 SELECT add_compression_policy('{{ chain }}.erc1155_xfers', INTERVAL '30 days', if_not_exists => true);
+{% endif %}
 {% endif %}
