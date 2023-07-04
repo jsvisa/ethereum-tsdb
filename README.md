@@ -38,6 +38,10 @@ CREATE EXTENSION IF NOT EXISTS timescaledb_toolkit;
 ALTER EXTENSION timescaledb_toolkit UPDATE;
 ```
 
+## setup master-slave replication
+
+ref https://docs.timescale.com/self-hosted/latest/replication-and-ha/configure-replication/
+
 ## use [pgBackRest](https://pgbackrest.org) to archive the database
 
 > exec into the tsdb container
