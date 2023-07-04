@@ -7,7 +7,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 40G
+          memory: 30G
         reservations:
           memory: 2G
     command:
@@ -16,13 +16,15 @@ services:
       - '-cshared_preload_libraries=timescaledb'
       - '-cmax_connections=1000'
       - '-cmax_wal_size=8GB'
-      - '-cshared_buffers=30GB'
-      - '-cmax_wal_senders=20'
+      - '-cshared_buffers=20GB'
+      - '-clisten_addresses="*"'
       - '-cwal_level=replica'
+      - '-cmax_wal_senders=2'
+      - '-cmax_replication_slots=2'
+      - '-csynchronous_commit=off'
     volumes:
       - ./pgdata:/home/postgres/pgdata
       - ./pg_log:/home/postgres/pg_log
-      - ./etc/pgbackrest.conf:/home/postgres/pgdata/backup/pgbackrest.conf
     environment:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=tsdb
