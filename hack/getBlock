@@ -19,7 +19,7 @@ if len(sys.argv) > 2:
 else:
     blknum = "latest"
 
-if blknum != "latest":
+if blknum.isdigit():
     blknum = hex(int(blknum))
 
 res = requests.post(
@@ -31,9 +31,12 @@ res = requests.post(
 
 result = res["result"]
 
-resp = {
-    "blknum": int(result["number"], 16),
-    "timestamp": str(datetime.utcfromtimestamp(int(result["timestamp"], 16))),
-}
+if result is None:
+    resp = {"blknum": 0, "timestamp": 0}
+else:
+    resp = {
+        "blknum": int(result["number"], 16),
+        "timestamp": str(datetime.utcfromtimestamp(int(result["timestamp"], 16))),
+    }
 
-print(json.dumps(resp, indent=2))
+print(json.dumps(resp))
