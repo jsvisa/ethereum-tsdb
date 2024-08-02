@@ -129,7 +129,7 @@ CREATE TABLE IF NOT EXISTS {{ chain }}.traces (
     txpos                       BIGINT,             -- Integer of the transactions index position in the block, null if this trace is block reward
     from_address                CHAR(42),           -- Address of the sender, null when trace_type is genesis or reward
     to_address                  CHAR(42),           -- Address of the receiver
-    value                       NUMERIC(65, 0),     -- Value transferred in Wei
+    value                       NUMERIC,            -- Value transferred in Wei
     input                       TEXT,               -- The data sent along with the message call
     output                      TEXT,               -- The output of the message call, bytecode of contract when trace_type is create
     trace_type                  VARCHAR(16),        -- One of call, create, suicide, reward, genesis, daofork
