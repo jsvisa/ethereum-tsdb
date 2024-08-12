@@ -1,23 +1,28 @@
 #!/usr/bin/env python3
 
+# flake8: noqa
+
 import os
 import argparse
 import pandas as pd
 import logging
+from time import time
+from jinja2 import Template
 from datetime import timedelta
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 
-BLOCK_SQL = """
+BLOCK_SQL = Template(
+    """
 WITH time_range(st, et) AS (
-    VALUES ('{st}'::timestamp, '{et}'::timestamp)
+    VALUES ('{{st}}'::timestamp, '{{et}}'::timestamp)
 ),
 aaa AS (
     SELECT
         *
     FROM
-        {aaa}.blocks
+        {{aaa}}.blocks
     WHERE
-        1 = 1
+        true
         AND block_timestamp >= (SELECT st FROM time_range)
         AND block_timestamp <  (SELECT et FROM time_range)
 ),
@@ -25,9 +30,9 @@ bbb AS (
     SELECT
         *
     FROM
-        {bbb}.blocks
+        {{bbb}}.blocks
     WHERE
-        1 = 1
+        true
         AND block_timestamp >= (SELECT st FROM time_range)
         AND block_timestamp <  (SELECT et FROM time_range)
 ),
@@ -83,6 +88,35 @@ ab AS (
         AND a.block_timestamp = b.block_timestamp
         AND a.blknum = b.blknum
 ),
+same AS (
+    SELECT
+        *
+    FROM
+        ab
+    WHERE
+        true
+        AND a_blknum = b_blknum
+        AND a_blkhash = b_blkhash
+        AND a_parent_hash = b_parent_hash
+        AND a_nonce = b_nonce
+        AND a_sha3_uncles = b_sha3_uncles
+        AND a_logs_bloom = b_logs_bloom
+        AND a_txs_root = b_txs_root
+        AND a_state_root = b_state_root
+        AND a_receipts_root = b_receipts_root
+        AND a_miner = b_miner
+        AND a_difficulty = b_difficulty
+        AND a_total_difficulty = b_total_difficulty
+        AND a_blk_size = b_blk_size
+        AND a_extra_data = b_extra_data
+        AND a_gas_limit = b_gas_limit
+        AND a_gas_used = b_gas_used
+        AND a_tx_count = b_tx_count
+        AND a_base_fee_per_gas = b_base_fee_per_gas
+        AND a_uncle_count = b_uncle_count
+        AND a_uncle0_hash = b_uncle0_hash
+        AND a_uncle1_hash = b_uncle1_hash
+),
 diff AS (
     SELECT
         *
@@ -112,6 +146,11 @@ diff AS (
         OR a_uncle0_hash <> b_uncle0_hash
         OR a_uncle1_hash <> b_uncle1_hash
 )
+{% if summary %}
+SELECT
+    A.count AS same, B.count AS diff
+FROM (SELECT count(*) FROM same) A JOIN (SELECT count(*) FROM diff) B ON true
+{% else %}
 SELECT
     *,
     CASE
@@ -140,19 +179,22 @@ SELECT
 FROM
     diff
 LIMIT 10000
+{% endif %}
 """
+)
 
-TRANSACTION_SQL = """
+TRANSACTION_SQL = Template(
+    """
 WITH time_range(st, et) AS (
-    VALUES ('{st}'::timestamp, '{et}'::timestamp)
+    VALUES ('{{st}}'::timestamp, '{{et}}'::timestamp)
 ),
 aaa AS (
     SELECT
         *
     FROM
-        {aaa}.txs
+        {{aaa}}.txs
     WHERE
-        1 = 1
+        true
         AND block_timestamp >= (SELECT st FROM time_range)
         AND block_timestamp <  (SELECT et FROM time_range)
 ),
@@ -160,9 +202,9 @@ bbb AS (
     SELECT
         *
     FROM
-        {bbb}.txs
+        {{bbb}}.txs
     WHERE
-        1 = 1
+        true
         AND block_timestamp >= (SELECT st FROM time_range)
         AND block_timestamp <  (SELECT et FROM time_range)
 ),
@@ -218,6 +260,34 @@ ab AS (
         AND a.txhash = b.txhash
         AND a.txpos = b.txpos
 ),
+same AS (
+    SELECT
+        *
+    FROM
+        ab
+    WHERE
+        true
+        AND a_blknum = b_blknum
+        AND a_txhash = b_txhash
+        AND a_txpos = b_txpos
+        AND a_nonce = b_nonce
+        AND a_from_address = b_from_address
+        AND a_to_address = b_to_address
+        AND a_value = b_value
+        AND a_gas = b_gas
+        AND a_gas_price = b_gas_price
+        AND a_input = b_input
+        AND a_max_fee_per_gas = b_max_fee_per_gas
+        AND a_max_priority_fee_per_gas = b_max_priority_fee_per_gas
+        AND a_tx_type = b_tx_type
+        AND a_receipt_cumulative_gas_used = b_receipt_cumulative_gas_used
+        AND a_receipt_gas_used = b_receipt_gas_used
+        AND a_receipt_contract_address = b_receipt_contract_address
+        AND a_receipt_root = b_receipt_root
+        AND a_receipt_status = b_receipt_status
+        AND a_receipt_effective_gas_price = b_receipt_effective_gas_price
+        AND a_receipt_log_count = b_receipt_log_count
+),
 diff AS (
     SELECT
         *
@@ -246,6 +316,11 @@ diff AS (
         OR a_receipt_effective_gas_price <> b_receipt_effective_gas_price
         OR a_receipt_log_count <> b_receipt_log_count
 )
+{% if summary %}
+SELECT
+    A.count AS same, B.count AS diff
+FROM (SELECT count(*) FROM same) A JOIN (SELECT count(*) FROM diff) B ON true
+{% else %}
 SELECT
     *,
     CASE
@@ -274,20 +349,23 @@ SELECT
 FROM
     diff
 LIMIT 10000
+{% endif %}
 """
+)
 
 
-TRACE_SQL = """
+TRACE_SQL = Template(
+    """
  WITH time_range(st, et) AS (
-    VALUES ('{st}'::timestamp, '{et}'::timestamp)
+    VALUES ('{{st}}'::timestamp, '{{et}}'::timestamp)
 ),
 aaa AS (
     SELECT
         *
     FROM
-        {aaa}.traces
+        {{aaa}}.traces
     WHERE
-        1 = 1
+        true
         AND block_timestamp >= (SELECT st FROM time_range)
         AND block_timestamp <  (SELECT et FROM time_range)
         AND trace_type <> 'reward'
@@ -296,9 +374,9 @@ bbb AS (
     SELECT
         *
     FROM
-        {bbb}.traces
+        {{bbb}}.traces
     WHERE
-        1 = 1
+        true
         AND block_timestamp >= (SELECT st FROM time_range)
         AND block_timestamp <  (SELECT et FROM time_range)
         AND trace_type <> 'reward'
@@ -350,6 +428,31 @@ ab AS (
         AND a.txpos = b.txpos
         AND a.trace_address = b.trace_address
 ),
+same AS (
+    SELECT
+        *
+    FROM
+        ab
+    WHERE
+        true
+        AND a_blknum = b_blknum
+        AND a_txhash = b_txhash
+        AND a_txpos = b_txpos
+        AND a_from_address = b_from_address
+        AND a_to_address = b_to_address
+        AND a_value = b_value
+        AND a_call_type = b_call_type
+        AND a_reward_type = b_reward_type
+        AND a_subtraces = b_subtraces
+        AND a_trace_address = b_trace_address
+        AND a_input = b_input
+        AND a_gas = b_gas
+        AND a_gas_used = b_gas_used
+        -- AND a_error = b_error
+        AND a_status = b_status
+        AND a_trace_type = b_trace_type
+        AND a_output = b_output
+),
 diff AS (
     SELECT
         *
@@ -375,6 +478,11 @@ diff AS (
         OR a_trace_type <> b_trace_type
         OR a_output <> b_output
 )
+{% if summary %}
+SELECT
+    A.count AS same, B.count AS diff
+FROM (SELECT count(*) FROM same) A JOIN (SELECT count(*) FROM diff) B ON true
+{% else %}
 SELECT
     *,
     CASE
@@ -400,19 +508,22 @@ SELECT
 FROM
     diff
 LIMIT 10000
+{% endif %}
 """
+)
 
-LOG_SQL = """
+LOG_SQL = Template(
+    """
 WITH time_range(st, et) AS (
-    VALUES ('{st}'::timestamp, '{et}'::timestamp)
+    VALUES ('{{st}}'::timestamp, '{{et}}'::timestamp)
 ),
 aaa AS (
     SELECT
         *
     FROM
-        {aaa}.logs
+        {{aaa}}.logs
     WHERE
-        1 = 1
+        true
         AND block_timestamp >= (SELECT st FROM time_range)
         AND block_timestamp <  (SELECT et FROM time_range)
 ),
@@ -420,9 +531,9 @@ bbb AS (
     SELECT
         *
     FROM
-        {bbb}.logs
+        {{bbb}}.logs
     WHERE
-        1 = 1
+        true
         AND block_timestamp >= (SELECT st FROM time_range)
         AND block_timestamp <  (SELECT et FROM time_range)
 ),
@@ -456,6 +567,23 @@ ab AS (
         AND a.txhash = b.txhash
         AND a.logpos = b.logpos
 ),
+same AS (
+    SELECT
+        *
+    FROM
+        ab
+    WHERE
+        true
+        AND a_blknum = b_blknum
+        AND a_txhash = b_txhash
+        AND a_txpos = b_txpos
+        AND a_logpos = b_logpos
+        AND a_address = b_address
+        AND a_n_topics = b_n_topics
+        AND a_topics = b_topics
+        AND a_data = b_data
+        AND a_topics_0 = b_topics_0
+),
 diff AS (
     SELECT
         *
@@ -473,6 +601,11 @@ diff AS (
         OR a_data <> b_data
         OR a_topics_0 <> b_topics_0
 )
+{% if summary %}
+SELECT
+    A.count AS same, B.count AS diff
+FROM (SELECT count(*) FROM same) A JOIN (SELECT count(*) FROM diff) B ON true
+{% else %}
 SELECT
     *,
     CASE
@@ -490,7 +623,9 @@ SELECT
 FROM
     diff
 LIMIT 10000
+{% endif %}
 """
+)
 
 
 TYPOS = {
@@ -564,9 +699,21 @@ def main():
         args.start_timestamp, args.end_timestamp, freq="1H", inclusive="left"
     ):
         et = st + timedelta(hours=1)
-        sql = SQL.format(st=str(st), et=str(et), aaa=args.aaa, bbb=args.bbb)
-        df = pd.read_sql(sql, con=engine)
-        logging.info(f"check with timestamp: [{st}, {et}) got #{len(df)}")
+        summary_sql = SQL.render(
+            st=str(st), et=str(et), aaa=args.aaa, bbb=args.bbb, summary=True
+        )
+        detail_sql = SQL.render(
+            st=str(st), et=str(et), aaa=args.aaa, bbb=args.bbb, summary=False
+        )
+        st0 = time()
+        with engine.connect() as conn:
+            summary = conn.execute(text(summary_sql)).fetchone()._asdict()
+        df = pd.read_sql(detail_sql, con=engine)
+        st1 = time()
+        logging.info(
+            f"check with timestamp: [{st}, {et}) summary: {summary} "
+            f"got #{len(df)} elapsed: {round(st1-st0, 2)}s"
+        )
         if len(df) > 0:
             print(
                 df.groupby(["reason"])["a_blknum"]
