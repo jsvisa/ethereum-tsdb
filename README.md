@@ -96,3 +96,18 @@ INFO: restore global/pg_control (performed last to ensure aborted restores canno
 INFO: restore size = 14.2GB, file total = 1594
 INFO: restore command end: completed successfully (74266ms)
 ```
+
+## Tips
+
+1. change the chunk interval on an existing hypertable
+
+```sql
+SELECT set_chunk_time_interval('geth.traces', INTERVAL '1 hour');
+```
+
+2. enable compression on hypertable
+
+```sql
+ALTER TABLE geth.traces SET(timescaledb.compress, timescaledb.compress_segmentby = 'blknum', timescaledb.compress_orderby = 'item_id, block_timestamp asc');
+SELECT add_compression_policy('geth.traces', INTERVAL '2 days', if_not_exists => true);
+```
