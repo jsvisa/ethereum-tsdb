@@ -681,6 +681,12 @@ def main():
         required=True,
         help="End timestamp, format: 2023-01-02 10:00:00",
     )
+    parser.add_argument(
+        "--dryrun",
+        action="store_true",
+        default=False,
+        help="Dry run only, print SQL and exit",
+    )
     args = parser.parse_args()
 
     is_debug_mode = args.debug is True
@@ -705,6 +711,11 @@ def main():
         detail_sql = SQL.render(
             st=str(st), et=str(et), aaa=args.aaa, bbb=args.bbb, summary=False
         )
+        if args.dryrun is True:
+            print(summary_sql)
+            print(detail_sql)
+            return
+
         st0 = time()
         with engine.connect() as conn:
             summary = conn.execute(text(summary_sql)).fetchone()._asdict()
