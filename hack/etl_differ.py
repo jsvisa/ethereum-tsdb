@@ -733,8 +733,7 @@ def main():
             df = pd.DataFrame()
         st1 = time()
         logging.info(
-            f"check with timestamp: [{st}, {et}) summary: {summary} "
-            f"got #{len(df)} differ rows elapsed: {round(st1-st0, 2)}s"
+            f"Checking [{st}, {et}) summary: {summary} elapsed: {round(st1-st0, 2)}s"
         )
         if len(df) > 0:
             print(
