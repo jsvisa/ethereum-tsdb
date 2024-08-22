@@ -727,11 +727,14 @@ def main():
         st0 = time()
         with engine.connect() as conn:
             summary = conn.execute(text(summary_sql)).fetchone()._asdict()
-        df = pd.read_sql(detail_sql, con=engine)
+        if summary["diff"] > 0:
+            df = pd.read_sql(detail_sql, con=engine)
+        else:
+            df = pd.DataFrame()
         st1 = time()
         logging.info(
             f"check with timestamp: [{st}, {et}) summary: {summary} "
-            f"got #{len(df)} elapsed: {round(st1-st0, 2)}s"
+            f"got #{len(df)} differ rows elapsed: {round(st1-st0, 2)}s"
         )
         if len(df) > 0:
             print(
