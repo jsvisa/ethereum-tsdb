@@ -3,8 +3,6 @@ CREATE SCHEMA IF NOT EXISTS {{ chain }};
 CREATE TABLE IF NOT EXISTS {{ chain }}.blocks (
     id                      BIGSERIAL,
     block_timestamp         TIMESTAMP,
-    _st                     INTEGER,            -- The unix timestamp
-    _st_day                 DATE,               -- The unix datetime
     blknum                  BIGINT NOT NULL,    -- The block number
     blkhash                 CHAR(66) NOT NULL,  -- The block hash
     parent_hash             CHAR(66) NOT NULL,  -- The parent block hash
@@ -42,8 +40,6 @@ SELECT add_compression_policy('{{ chain }}.blocks', INTERVAL '60 days', if_not_e
 CREATE TABLE IF NOT EXISTS {{ chain }}.txs (
     id                          BIGSERIAL,
     block_timestamp             TIMESTAMP,
-    _st                         INTEGER,    -- The unix timestamp
-    _st_day                     DATE,       -- The unix datetime
     blknum                      BIGINT,     -- The block number
     txhash                      CHAR(66) NOT NULL,       -- Hash of the transaction
     txpos                       BIGINT,     -- Integer of the transactions index position in the block
@@ -122,8 +118,6 @@ SELECT add_retention_policy('{{ chain }}.txpools', INTERVAL '6 hours', if_not_ex
 CREATE TABLE IF NOT EXISTS {{ chain }}.traces (
     id                          BIGSERIAL,
     block_timestamp             TIMESTAMP,
-    _st                         INTEGER NOT NULL,   -- The unix timestamp
-    _st_day                     DATE NOT NULL,      -- The unix datetime
     blknum                      BIGINT NOT NULL,    -- The block number
     txhash                      CHAR(66),           -- Hash of the transaction, null if this trace is block reward
     txpos                       BIGINT,             -- Integer of the transactions index position in the block, null if this trace is block reward
@@ -168,8 +162,6 @@ SELECT add_compression_policy('{{ chain }}.traces', INTERVAL '30 days', if_not_e
 CREATE TABLE IF NOT EXISTS {{ chain }}.logs (
     id                          BIGSERIAL,
     block_timestamp             TIMESTAMP,
-    _st                         INTEGER,    -- The unix timestamp
-    _st_day                     DATE,       -- The unix datetime
     blknum                      BIGINT,     -- The block number
     txhash                      CHAR(66),   -- Hash of the transaction
     txpos                       BIGINT,     -- Integer of the transactions index position in the block
@@ -201,8 +193,6 @@ SELECT add_compression_policy('{{ chain }}.logs', INTERVAL '30 days', if_not_exi
 CREATE TABLE IF NOT EXISTS {{ chain }}.contracts (
     id                          BIGSERIAL,
     block_timestamp             TIMESTAMP,
-    _st                         INTEGER,    -- The unix timestamp
-    _st_day                     DATE,       -- The unix datetime
     blknum                      BIGINT,     -- The block number
     txhash                      CHAR(66),   -- Hash of the transaction
     txpos                       BIGINT,     -- Integer of the transactions index position in the block
@@ -233,8 +223,6 @@ SELECT create_hypertable('{{ chain }}.contracts', 'block_timestamp', if_not_exis
 CREATE TABLE IF NOT EXISTS {{ chain }}.tokens (
     id                          BIGSERIAL,
     block_timestamp             TIMESTAMP,
-    _st                         INTEGER,    -- The unix timestamp
-    _st_day                     DATE,       -- The unix datetime
     blknum                      BIGINT,     -- The block number
     txhash                      CHAR(66) NOT NULL,       -- Hash of the transaction
     txpos                       BIGINT,     -- Integer of the transactions index position in the block
@@ -259,8 +247,6 @@ CREATE TABLE IF NOT EXISTS {{ chain }}.tokens (
 CREATE TABLE IF NOT EXISTS {{ chain }}.token_xfers (
     id                          BIGSERIAL,
     block_timestamp             TIMESTAMP,
-    _st                         INTEGER,    -- The unix timestamp
-    _st_day                     DATE,       -- The unix datetime
     blknum                      BIGINT,     -- The block number
     txhash                      CHAR(66) NOT NULL,       -- Hash of the transaction
     txpos                       BIGINT,     -- Integer of the transactions index position in the block
@@ -293,8 +279,6 @@ SELECT add_compression_policy('{{ chain }}.token_xfers', INTERVAL '30 days', if_
 CREATE TABLE IF NOT EXISTS {{ chain }}.erc721_xfers (
     id                          BIGSERIAL,
     block_timestamp             TIMESTAMP,
-    _st                         INTEGER,    -- The unix timestamp
-    _st_day                     DATE,       -- The unix datetime
     blknum                      BIGINT,     -- The block number
     txhash                      CHAR(66) NOT NULL,       -- Hash of the transaction
     txpos                       BIGINT,     -- Integer of the transactions index position in the block
@@ -329,8 +313,6 @@ SELECT add_compression_policy('{{ chain }}.erc721_xfers', INTERVAL '30 days', if
 CREATE TABLE IF NOT EXISTS {{ chain }}.erc1155_xfers (
     id                          BIGSERIAL,
     block_timestamp             TIMESTAMP,
-    _st                         INTEGER,    -- The unix timestamp
-    _st_day                     DATE,       -- The unix datetime
     blknum                      BIGINT,     -- The block number
     txhash                      CHAR(66) NOT NULL,       -- Hash of the transaction
     txpos                       BIGINT,     -- Integer of the transactions index position in the block
